@@ -53,3 +53,18 @@
 - [42. Rate Limiting and Quotas](./42-rate-limiting-and-quotas.md)
 - [43. Change Management and Release](./43-change-management-and-release.md)
 - [44. Documentation and Runbooks](./44-documentation-and-runbooks.md)
+
+## Reference and Implementation Contracts (45–51)
+- [45. Glossary and Acronyms](./45-glossary.md)
+- [46. Naming Conventions](./46-naming-conventions.md)
+- [47. Validation Rules](./47-validation-rules.md)
+- [48. Database Schema and ERD](./48-database-schema.md)
+- [49. API Contract](./49-api-contract.md)
+- [50. Frontend Architecture (Web)](./50-frontend-architecture.md)
+- [51. Mobile and Offline Architecture](./51-mobile-offline-architecture.md)
+
+## Project Meta
+- [Contributing](../CONTRIBUTING.md)
+- [Code of Conduct](../CODE_OF_CONDUCT.md)
+- [Security Policy](../SECURITY.md)
+- [Changelog](../CHANGELOG.md)

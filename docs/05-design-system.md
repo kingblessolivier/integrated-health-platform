@@ -20,7 +20,8 @@ Color does functional work here — it carries **state**, so semantic colors are
 | Meaning | Hex | Use |
 |---|---|---|
 | 🔴 Critical / Emergency | `#D32F2F` | SOS, interaction alerts, expired batch, account lock |
-| 🟠 Warning / Offline-autonomous | `#F5A623` | Sync banner (offline), low stock, licence expiring |
+| 🟠 Warning / Offline-autonomous (**fill only**) | `#F5A623` | Sync banner (offline), low stock, licence expiring — **always with dark ink `#1A1A2E` text (8.4:1); never white (white-on-amber is only 2.0:1, fails AA)** |
+| 🟠 Warning (**text / icon on white**) | `#B26A00` | The amber foreground variant, darkened to meet 4.5:1 — use this whenever amber is a glyph or label colour, never the bright fill |
 | 🟢 Success / Synced / Healthy | `#2E7D32` | Synced banner, claim paid, in-range vitals |
 | 🔵 Info / Neutral action | `#1565C0` | Links, info notices (kept distinct from brand teal) |
 
@@ -34,11 +35,34 @@ Color does functional work here — it carries **state**, so semantic colors are
 | Surface / card | `#FFFFFF` |
 
 ### Data-visualization (colorblind-safe, distinct from alerts)
-`#0E7C7B · #4C9F70 · #8AB17D · #E9C46A · #F4A261 · #6A8EAE` + sequential teal ramp for
-choropleth disease maps.
+Qualitative series use the **Okabe–Ito** palette — a set engineered to stay distinct under
+deuteranopia, protanopia, and tritanopia (the earlier ad-hoc set had two greens and a
+green/blue-grey luminance collision that fail under red-green CVD):
+
+`#E69F00 · #56B4E9 · #009E73 · #0072B2 · #D55E00 · #CC79A7 · #F0E442`
+
+- Cap a single chart at ~7 categories; beyond that, group or facet rather than add hues.
+- `#F0E442` (yellow) is a **fill only** — outline it and never use it as text on white.
+- **Choropleth / disease maps** use a single-hue **sequential teal ramp** (sequential ramps
+  are inherently CVD-safe).
+- None of the qualitative hues may be read as state — keep them clear of the red/amber/green
+  semantic meanings.
 
 **Discipline:** Teal = brand. Red/Amber/Green = state only. Blue = info. Greys =
 everything else. Never use color alone — always pair with an icon + text label.
+
+### Tokens — ramps & semantic roles
+Single hex values are not enough for real UI. Define a **tonal ramp (50→900)** per brand and
+semantic colour, then map **semantic role tokens** onto the ramp so one source drives React
+(CSS variables) and Flutter (Dart `ColorScheme`) identically — the approach used by IBM
+Carbon, SAP Fiori, and Material 3:
+
+- Roles: `--color-bg`, `--color-surface`, `--color-text`, `--color-text-secondary`,
+  `--color-border`, and per-state `*-fg` / `*-bg` (e.g. `--color-danger-fg`,
+  `--color-warning-bg`), each with `hover` / `pressed` / `disabled` steps.
+- The subtle divider `#D9DEE4` (only 1.25:1 on the app background) is for decorative
+  separation; **interactive control outlines need a darker border token (≥ 3:1)** to meet
+  WCAG 2.2 (1.4.11).
 
 ## Typography
 
