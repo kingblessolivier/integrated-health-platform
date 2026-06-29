@@ -9,11 +9,12 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  drift: ^2.18.0          # SQLite op-log + cached records
-  sqlite3_flutter_libs: ^0.5.0
-  hive: ^2.2.3            # iCCM decision tables, lightweight KV
-  http: ^1.2.0
-  connectivity_plus: ^6.0.0
+
+# Phase 2 dependencies (added when the offline data layer is implemented — see docs/51):
+#   drift, sqlite3_flutter_libs   # SQLite op-log + cached records
+#   hive                          # iCCM decision tables, lightweight KV
+#   http                          # API client
+#   connectivity_plus             # reconnect-triggered sync
 
 dev_dependencies:
   flutter_test:
