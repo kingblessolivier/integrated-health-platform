@@ -47,6 +47,23 @@ entitled to, at your data altitude.
 | [07 — Technology Stack](docs/07-technology-stack.md) | Backend, frontend, data, infrastructure |
 | [08 — Security & Cryptography](docs/08-security-and-cryptography.md) | Authn/z, encryption, audit chain |
 | [09 — Interoperability](docs/09-interoperability.md) | National-system integrations |
+| [10 — User Workflows](docs/10-user-workflows.md) | What each actor does, end to end |
+| [11 — Communication & Handoffs](docs/11-communication-and-handoffs.md) | Structured data handoff between actors |
+| [12 — Operations Verification](docs/12-operations-verification.md) | Technical · clinical · supervisory verification chain |
+| [13 — Data Visibility by Role](docs/13-data-visibility-by-role.md) | The may-see / may-not-see matrix |
+| [14 — Analytics & Dashboards](docs/14-analytics-and-dashboards.md) | Per-actor dashboard catalogue |
+| [15 — Patient Management](docs/15-patient-management.md) | Identity, longitudinal record, consent, NCD care |
+| [16 — Stock & Pharmacy Management](docs/16-stock-and-pharmacy-management.md) | Catalogue, FEFO, POS, cold chain |
+| [17 — Supply Chain Management](docs/17-supply-chain-management.md) | B2B marketplace, goods receiving, supply intelligence |
+| [18 — Workforce & HR Management](docs/18-workforce-and-hr-management.md) | Onboarding, access, payroll, compliance |
+| [19 — Ambulance & Emergency Management](docs/19-ambulance-and-emergency-management.md) | Dispatch, telemetry, handover, fleet |
+| [20 — Leadership & Governance](docs/20-leadership-and-governance.md) | Facility, district, national governance + PBF |
+| [21 — Threat Monitoring & Incident Response](docs/21-threat-monitoring-and-incident-response.md) | SOC, detection, containment, pentesting |
+| [22 — IT Department Responsibilities](docs/22-it-department-responsibilities.md) | SysOps, SOC, helpdesk, integration ops |
+| [23 — Deployment & Infrastructure](docs/23-deployment-and-infrastructure.md) | IaC, CI/CD, HA/failover, offline-first |
+| [24 — Database Design & Indexing](docs/24-database-design-and-indexing.md) | Multi-tenant schema, indexes, partitioning |
+| [25 — Load Balancing & Performance](docs/25-load-balancing-and-performance.md) | Scaling, caching, performance targets |
+| [26 — Conclusion](docs/26-conclusion.md) | The unifying vision |
 
 ## Status
 
