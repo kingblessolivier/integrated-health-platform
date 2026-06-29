@@ -23,6 +23,9 @@ on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
   every user can do, grounded in the command bundles, with explicit boundaries per role.
 
 ### Changed
+- Root `README.md`: completed the stale documentation index (it listed only docs 01–26) —
+  now a grouped, full index of all 63 docs plus project-meta links, with the corrected
+  command count (~115 commands, 29 domains).
 - `docs/03-command-catalogue.md`: added the Appointments (`AP`) domain (`APBK/APVW/APRS/APRM`)
   and wired it into the reception, clinician, and patient bundles; updated the count.
 - `docs/53-use-case-model.md` and `docs/62-requirements-traceability-matrix.md`: reconciled
