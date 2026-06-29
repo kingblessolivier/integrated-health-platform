@@ -1,5 +1,18 @@
 # 30. SLA, SLO, Monitoring, and Alerting Runbooks
 
+## Metadata
+- **Owner:** SRE Team
+- **Backup Owner:** Platform Operations Manager
+- **Last Reviewed:** 2026-06-29
+- **Review Cadence:** Quarterly
+- **Version:** 1.1
+
+## Navigation
+- **Index:** [00-index.md](./00-index.md)
+- **Previous:** [29-testing-strategy-and-qa.md](./29-testing-strategy-and-qa.md)
+- **Next:** [31-backup-recovery-and-disaster-recovery.md](./31-backup-recovery-and-disaster-recovery.md)
+- **Related:** [07-technology-stack.md](./07-technology-stack.md), [21-threat-monitoring-and-incident-response.md](./21-threat-monitoring-and-incident-response.md), [44-documentation-and-runbooks.md](./44-documentation-and-runbooks.md)
+
 ## Purpose
 Define measurable reliability objectives, alert thresholds, and actionable runbooks.
 
@@ -70,4 +83,3 @@ Define measurable reliability objectives, alert thresholds, and actionable runbo
 - Dependency status board
 - Queue depth and DLQ trends
 - Clinical workflow success funnel
-

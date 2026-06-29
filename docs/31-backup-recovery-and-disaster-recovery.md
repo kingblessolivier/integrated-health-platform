@@ -1,5 +1,18 @@
 # 31. Backup, Recovery, and Disaster Recovery
 
+## Metadata
+- **Owner:** Infrastructure Team
+- **Backup Owner:** Database Reliability Engineer
+- **Last Reviewed:** 2026-06-29
+- **Review Cadence:** Quarterly
+- **Version:** 1.1
+
+## Navigation
+- **Index:** [00-index.md](./00-index.md)
+- **Previous:** [30-sla-slo-monitoring-and-alerting.md](./30-sla-slo-monitoring-and-alerting.md)
+- **Next:** [32-secrets-and-key-management.md](./32-secrets-and-key-management.md)
+- **Related:** [23-deployment-and-infrastructure.md](./23-deployment-and-infrastructure.md), [24-database-design-and-indexing.md](./24-database-design-and-indexing.md), [44-documentation-and-runbooks.md](./44-documentation-and-runbooks.md)
+
 ## Purpose
 Define recoverability controls, concrete RPO/RTO commitments, and tested failover procedures.
 
@@ -55,4 +68,3 @@ Each drill must record:
 - Track replication lag continuously.
 - Critical alert if lag > 10s for 5m.
 - Block failover if consistency checks fail.
-

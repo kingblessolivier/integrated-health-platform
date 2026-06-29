@@ -1,5 +1,17 @@
 # 27. Error Handling and Resilience Patterns
 
+## Metadata
+- **Owner:** Platform Engineering
+- **Backup Owner:** Clinical Product Engineering Lead
+- **Last Reviewed:** 2026-06-29
+- **Review Cadence:** Quarterly
+- **Version:** 1.1
+
+## Navigation
+- **Index:** [00-index.md](./00-index.md)
+- **Next:** [28-mobile-sync-and-conflict-resolution.md](./28-mobile-sync-and-conflict-resolution.md)
+- **Related:** [09-interoperability.md](./09-interoperability.md), [23-deployment-and-infrastructure.md](./23-deployment-and-infrastructure.md), [30-sla-slo-monitoring-and-alerting.md](./30-sla-slo-monitoring-and-alerting.md)
+
 ## Purpose
 Define how the platform behaves when dependencies fail, latency spikes, or partial outages occur, while preserving patient safety and core continuity of care.
 
@@ -101,4 +113,3 @@ Retention: 72h.
 ## SLO Alignment
 - Dependency-induced failed clinical commands < 0.5% per day.
 - Recovery from transient upstream outage < 10 minutes (P95).
-
