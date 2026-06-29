@@ -1,0 +1,29 @@
+/* Design tokens — mirrors docs/05-design-system.md (incl. corrected amber rules). */
+:root {
+  /* Brand */
+  --color-brand: #0E7C7B;
+  --color-brand-deep: #06402B;
+  --color-brand-tint: #E6F2F1;
+
+  /* Semantic (state only) */
+  --color-danger: #D32F2F;
+  --color-warning-fill: #F5A623;   /* fill — use with dark ink text only */
+  --color-warning-fg: #B26A00;     /* foreground (text/icon on white), AA-compliant */
+  --color-success: #2E7D32;
+  --color-info: #1565C0;
+
+  /* Neutrals */
+  --color-text: #1A1A2E;
+  --color-text-secondary: #5A6472;
+  --color-border: #D9DEE4;
+  --color-border-strong: #9AA4B2;  /* for interactive outlines (>=3:1) */
+  --color-bg: #F4F6F8;
+  --color-surface: #FFFFFF;
+
+  --radius: 8px;
+  --space: 8px;
+  --font: "Inter", system-ui, sans-serif;
+}
+
+body { margin: 0; font-family: var(--font); color: var(--color-text); background: var(--color-bg); }
+.sync-banner--offline { background: var(--color-warning-fill); color: var(--color-text); } /* dark on amber */

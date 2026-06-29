@@ -77,6 +77,14 @@
 - [62. Requirements Traceability Matrix](./62-requirements-traceability-matrix.md)
 - [63. Use Case Catalogue — What Every User Can Do](./63-use-case-catalogue.md)
 
+## Delivery
+- [64. MVP Scope & Delivery Roadmap](./64-mvp-scope-and-roadmap.md)
+
+## Codebase
+- [`backend/`](../backend/README.md) — Django + DRF API skeleton (auth, RLS, audit, sample app)
+- [`frontend/`](../frontend/README.md) — React + TS web skeleton (command bar, entitlements)
+- [`mobile/`](../mobile/README.md) — Flutter offline-first skeleton (op-log, sync engine)
+
 ## Project Meta
 - [Contributing](../CONTRIBUTING.md)
 - [Code of Conduct](../CODE_OF_CONDUCT.md)

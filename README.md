@@ -36,7 +36,7 @@ entitled to, at your data altitude.
 
 ## Documentation
 
-The full, always-current index lives in **[docs/00-index.md](docs/00-index.md)**. The 63
+The full, always-current index lives in **[docs/00-index.md](docs/00-index.md)**. The 64
 numbered documents are grouped below.
 
 **Core architecture (01–07)**
@@ -115,8 +115,36 @@ numbered documents are grouped below.
   [62 — Requirements Traceability Matrix](docs/62-requirements-traceability-matrix.md) ·
   [63 — Use Case Catalogue](docs/63-use-case-catalogue.md)
 
+**Delivery:** [64 — MVP Scope & Delivery Roadmap](docs/64-mvp-scope-and-roadmap.md)
+
 **Project meta:** [Contributing](CONTRIBUTING.md) · [Code of Conduct](CODE_OF_CONDUCT.md) ·
 [Security Policy](SECURITY.md) · [Changelog](CHANGELOG.md)
+
+## Repository layout
+
+| Path | What |
+|---|---|
+| [`docs/`](docs/00-index.md) | The full specification, analysis & design (64 docs) |
+| [`backend/`](backend/README.md) | Django + DRF API skeleton — auth (four-axis), RLS, audit chain, sample app |
+| [`frontend/`](frontend/README.md) | React + TypeScript web skeleton — command bar, entitlements, design tokens |
+| [`mobile/`](mobile/README.md) | Flutter offline-first skeleton — op-log + sync engine |
+| `backend/sql/0001_initial.sql` | Canonical, runnable database schema (mirrors [doc 48](docs/48-database-schema.md)) |
+| `docker-compose.yml` | Local stack: Postgres (TimescaleDB+PostGIS), Redis, API |
+
+## Getting started (local)
+
+```bash
+# 1. bring up the stack (applies the schema on first run)
+docker compose up -d
+
+# 2. backend
+cd backend && cp .env.example .env && pip install -r requirements.txt && python manage.py runserver
+
+# 3. frontend (separate shell)
+cd frontend && npm install && npm run dev
+```
+
+See [docs/64 — MVP Scope & Delivery Roadmap](docs/64-mvp-scope-and-roadmap.md) for what to build first.
 
 ## Status
 

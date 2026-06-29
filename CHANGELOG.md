@@ -6,6 +6,13 @@ on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ## [Unreleased]
 
 ### Added
+- **Project scaffolding**: Django + DRF backend skeleton (`backend/` — four-axis
+  `HoldsCommand` permission, RLS `TenantContextMiddleware`, SHA-256 audit-chain service,
+  sample patients app, runnable `sql/0001_initial.sql`), React + TS web skeleton
+  (`frontend/` — command bar, entitlements, API client, design tokens), Flutter offline-first
+  skeleton (`mobile/` — op-log + sync engine), GitHub Actions CI for each, and `docker-compose.yml`.
+- MVP scope & delivery roadmap (`docs/64-mvp-scope-and-roadmap.md`) — the Clinical Slice MVP
+  plus a phased build plan.
 - Reference docs: glossary & acronyms (`docs/45-glossary.md`), naming conventions
   (`docs/46-naming-conventions.md`), validation rules (`docs/47-validation-rules.md`).
 - Implementation-contract docs: database schema & ERD (`docs/48-database-schema.md`),
@@ -23,6 +30,10 @@ on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
   every user can do, grounded in the command bundles, with explicit boundaries per role.
 
 ### Changed
+- `docs/48-database-schema.md`: expanded from excerpts into the complete, migration-ready
+  schema — all ~30 tables, enums, indexes, RLS policies, triggers, partitioning, TimescaleDB,
+  and FHIR mapping; mirrored as the runnable `backend/sql/0001_initial.sql`.
+- Root `README.md`: added repository-layout and getting-started sections for the codebase.
 - Root `README.md`: completed the stale documentation index (it listed only docs 01–26) —
   now a grouped, full index of all 63 docs plus project-meta links, with the corrected
   command count (~115 commands, 29 domains).
