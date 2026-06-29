@@ -75,6 +75,7 @@
 - [60. Component & Deployment Diagrams](./60-component-and-deployment-diagrams.md)
 - [61. Data Dictionary](./61-data-dictionary.md)
 - [62. Requirements Traceability Matrix](./62-requirements-traceability-matrix.md)
+- [63. Use Case Catalogue — What Every User Can Do](./63-use-case-catalogue.md)
 
 ## Project Meta
 - [Contributing](../CONTRIBUTING.md)

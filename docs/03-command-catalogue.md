@@ -11,7 +11,7 @@ auditable**: each execution writes `who · command · resource · when` to the a
 
 ---
 
-## Command catalogue (~110 commands, 28 domains)
+## Command catalogue (~115 commands, 29 domains)
 
 ### PT — Patient
 | Code | Action |
@@ -108,6 +108,14 @@ auditable**: each execution writes `who · command · resource · when` to the a
 | `RFNW` | Create referral (6-digit tracking code) |
 | `RFRC` | Receive referral by code |
 | `RFTR` | Track referral status |
+
+### AP — Appointments / Scheduling
+| Code | Action |
+|---|---|
+| `APBK` | Book appointment (patient or clinician) |
+| `APVW` | View appointment schedule |
+| `APRS` | Reschedule / cancel appointment |
+| `APRM` | Reminder dispatch (push / SMS) |
 
 ### ST — Stock / Inventory
 | Code | Action |
@@ -281,8 +289,8 @@ The command remains the atom; bundles are convenience. `ANVW` is implied in all.
 | CHW – Binôme | `CHHH CHIC CHRD CHKT CHFP CHTB CHNC RFNW RFTR PTTM PTVW PBVW` |
 | CHW – ASM | `MTAN MTPN CHHH RFNW RFTR PTTM PBVW` |
 | Cell coordinator | `CHKA CHVD STIN SVAL PBVW` |
-| Reception / ADT clerk | `PTRG PTSR PTVW ENNW CLEL BLVW BLPY` |
-| OPD clinician | `PTSR PTVW ENNW ENHX ENVT ENDX ENNT ENCL RXNW LBOR IMOR RFNW CNVW` |
+| Reception / ADT clerk | `PTRG PTSR PTVW ENNW CLEL BLVW BLPY APBK APVW APRS` |
+| OPD clinician | `PTSR PTVW ENNW ENHX ENVT ENDX ENNT ENCL RXNW LBOR IMOR RFNW CNVW APBK APVW` |
 | Emergency physician | OPD clinician + `PTTM EMTL EMDM` |
 | Ward nurse | `PTVW ENVT RXVW RXAD` |
 | Anaesthetist / theatre | `SXSL SXVT SXRC ENVT` |
@@ -311,7 +319,7 @@ The command remains the atom; bundles are convenience. `ANVW` is implied in all.
 | RSSB | `CLSC CLRV CLST CLUT SEAN` |
 | RMS | `SCNS STIN CTMG` |
 | Pharmacy Council | `RGLC` |
-| Patient (app) | `PTVW PTFC RXVW LBVW IMVW BLVW BLPY CNGR CNRV RFTR EMSO` |
+| Patient (app) | `PTVW PTFC RXVW LBVW IMVW BLVW BLPY CNGR CNRV RFTR EMSO APBK APVW APRS` |
 | Patient (feature phone) | `RXVW BLPY RFTR` (USSD subset) |
 | Caregiver / proxy | patient subset, consent-delegated |
 | Diaspora | `BLXB BLVW` (named dependant, within consent) |

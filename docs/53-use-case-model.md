@@ -86,7 +86,7 @@ flowchart LR
 | Field | Value |
 |---|---|
 | Actors | CHW (*binôme*) |
-| Command | `CHVS`, `CHRF` |
+| Command | `CHIC`, `CHRD`, `RFNW` |
 | Pre-conditions | App installed; village polygon cached |
 | Main flow | 1. Open app (GPS polygon verified offline) → 2. Run iCCM tree → 3. Log RDT, auto-dose, decrement kit → 4. Trigger referral with SMS code → 5. Queue to op-log → 6. Sync on reconnect |
 | Alternate | 6a. Conflict on sync → human resolution (doc 51) |
@@ -97,7 +97,7 @@ flowchart LR
 | Field | Value |
 |---|---|
 | Actors | Patient/SOS, SAMU dispatcher, Ambulance crew, receiving hospital |
-| Command | `EMSO`, `EMDP` |
+| Command | `EMSO`, `EMIN`, `EMDS` |
 | Pre-conditions | SAMU console online; ambulances reporting GPS |
 | Main flow | 1. SOS/912 with GPS → 2. PostGIS nearest-unit query → 3. Dispatch with route → 4. Crew streams vitals → 5. Best facility matched → 6. ED pre-alerted → 7. Handover into EMR |
 | Post-conditions | Patient transported; pre-hospital record continuous |

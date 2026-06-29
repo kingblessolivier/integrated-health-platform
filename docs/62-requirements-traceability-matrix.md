@@ -17,8 +17,8 @@ verifying that every requirement is designed and tested.
 | FR-07 EBM certified invoice | UC-05 | `RXDP` | 09 interop, 36 payments | Integration (EBM stub) |
 | FR-08 Inventory & alerts | — | `STVW`,`STAL` | 48, 16 | Unit, integration |
 | FR-09 B2B marketplace | — | `PObm`,`POrc` | 17 supply chain | Integration |
-| FR-10 CHW offline iCCM | UC-10 | `CHVS`,`CHRF` | 51 mobile, 58 activity | Unit (polygon), device test |
-| FR-11 Emergency dispatch | UC-11 | `EMSO`,`EMDP` | 57 seq, 60 deploy | Integration (PostGIS), E2E |
+| FR-10 CHW offline iCCM | UC-10 | `CHIC`,`CHRD`,`RFNW` | 51 mobile, 58 activity | Unit (polygon), device test |
+| FR-11 Emergency dispatch | UC-11 | `EMIN`,`EMDS`,`EMSO` | 57 seq, 60 deploy | Integration (PostGIS), E2E |
 | FR-12 Insurance claims | UC-05 | `CLSB`,`CLrv` | 58 activity, 59 state | Integration (RSSB stub) |
 | FR-13 HR & payroll | — | `HRon`,`PRrn` | 18 HR | Unit, integration |
 | FR-14 Consent | — | `CNGR`,`CNRV` | 56 (ConsentPolicy) | Unit, security test |
@@ -28,7 +28,7 @@ verifying that every requirement is designed and tested.
 | FR-18 FHIR to DHIS2/eIDSR | — | (scheduled) | 09 interop | Integration (FHIR validate) |
 | FR-19 Audit chain | all | (all) | 48, 34 | Unit (hash chain), security |
 | FR-20 Offline sync | UC-10 | (sync) | 51, 28, 59 | Unit (conflict), device test |
-| FR-21 Patient portal/USSD | — | `PTFC`,`APbk` | 49, 50 | E2E |
+| FR-21 Patient portal/USSD | — | `PTFC`,`APBK`,`BLPY` | 49, 50 | E2E |
 
 ## Non-functional requirements
 
@@ -49,5 +49,6 @@ verifying that every requirement is designed and tested.
 ## Coverage summary
 - Every **Must** functional requirement traces to at least one use case, design artifact, and
   test type.
-- Command codes marked illustratively (e.g. `CHVS`, `EMSO`) extend the catalogue in
-  [03](03-command-catalogue.md) and should be reconciled there as those domains are finalised.
+- All command codes above are reconciled with the authoritative catalogue in
+  [03](03-command-catalogue.md), including the Appointments (`AP`) domain added during this
+  pass.

@@ -19,7 +19,14 @@ on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
   Deployment Diagrams, Data Dictionary, and Requirements Traceability Matrix (Mermaid
   diagrams throughout).
 
+- Full use-case catalogue (`docs/63-use-case-catalogue.md`) — a role-by-role account of what
+  every user can do, grounded in the command bundles, with explicit boundaries per role.
+
 ### Changed
+- `docs/03-command-catalogue.md`: added the Appointments (`AP`) domain (`APBK/APVW/APRS/APRM`)
+  and wired it into the reception, clinician, and patient bundles; updated the count.
+- `docs/53-use-case-model.md` and `docs/62-requirements-traceability-matrix.md`: reconciled
+  command codes with the authoritative catalogue (e.g. `CHVS`→`CHIC/CHRD`, `EMDP`→`EMDS`).
 - `docs/05-design-system.md`: fixed the failing amber state contrast (dark ink on amber;
   added darker `#B26A00` amber for foreground use), replaced the data-visualization palette
   with the colourblind-safe Okabe–Ito set, and added tonal-ramp / semantic-role token guidance.
