@@ -13,6 +13,11 @@ on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
   (`docs/50-frontend-architecture.md`), and mobile & offline architecture
   (`docs/51-mobile-offline-architecture.md`).
 - Repository meta files: `CODE_OF_CONDUCT.md`, `SECURITY.md`, and this `CHANGELOG.md`.
+- System Analysis & Design document set (`docs/52`–`docs/62`): Software Requirements
+  Specification, Use Case Model, Data Flow Diagrams, Conceptual Data Model, Domain Class
+  Diagram, Sequence Diagrams, Activity Diagrams, State Transition Diagrams, Component &
+  Deployment Diagrams, Data Dictionary, and Requirements Traceability Matrix (Mermaid
+  diagrams throughout).
 
 ### Changed
 - `docs/05-design-system.md`: fixed the failing amber state contrast (dark ink on amber;
