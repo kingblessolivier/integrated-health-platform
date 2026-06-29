@@ -5,7 +5,21 @@ on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### Fixed
+- CI scaffolding (Phase 0): frontend build script (`tsc && vite build`) and
+  `vitest --passWithNoTests`; backend `pytest.ini` + first unit tests (audit hash,
+  `HoldsCommand` permission); mobile `analysis_options.yaml` + smoke widget test.
+- Removed the hardcoded Postgres password from `docker-compose.yml` (now required from
+  `.env` via interpolation); added root `.env.example` and a `.gitignore` rule so
+  `.env.example` files are tracked.
+
 ### Added
+- Auth spine: `FourAxisTokenSerializer` issues a JWT carrying user/tenant/geo/sensitivity +
+  the command bundle (`backend/apps/accounts/tokens.py`), wired into the login URL.
+- **Project scaffolding**: Django + DRF backend skeleton (`backend/` — four-axis
+  `HoldsCommand` permission, RLS `TenantContextMiddleware`, SHA-256 audit-chain service,
+  sample patients app, runnable `sql/0001_initial.sql`), React + TS web skeleton
+  (`frontend/` — command bar, entitlements, API client, design tokens), Flutter offline-first
 - **Project scaffolding**: Django + DRF backend skeleton (`backend/` — four-axis
   `HoldsCommand` permission, RLS `TenantContextMiddleware`, SHA-256 audit-chain service,
   sample patients app, runnable `sql/0001_initial.sql`), React + TS web skeleton

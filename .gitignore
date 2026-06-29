@@ -1,6 +1,7 @@
 # ---- Environment & secrets ----
 .env
 .env.*
+!.env.example          # example files are committed (no real secrets)
 *.pem
 *.key
 secrets/
