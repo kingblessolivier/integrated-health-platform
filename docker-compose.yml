@@ -1,0 +1,29 @@
+# Local development stack. Postgres uses the TimescaleDB+PostGIS-capable image so the
+# canonical schema (backend/sql/0001_initial.sql) applies cleanly.
+services:
+  db:
+    image: timescale/timescaledb-ha:pg16
+    environment:
+      POSTGRES_DB: inhp
+      POSTGRES_USER: inhp
+      POSTGRES_PASSWORD: inhp
+    ports: ["5432:5432"]
+    volumes:
+      - dbdata:/var/lib/postgresql/data
+      - ./backend/sql/0001_initial.sql:/docker-entrypoint-initdb.d/0001_initial.sql:ro
+
+  redis:
+    image: redis:7
+    ports: ["6379:6379"]
+
+  api:
+    build: ./backend
+    env_file: ./backend/.env.example
+    environment:
+      POSTGRES_HOST: db
+      REDIS_URL: redis://redis:6379/0
+    depends_on: [db, redis]
+    ports: ["8000:8000"]
+
+volumes:
+  dbdata:
