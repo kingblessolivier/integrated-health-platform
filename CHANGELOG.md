@@ -5,6 +5,16 @@ on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### Added (Phase 2 — CHW offline, Flutter client core)
+- Dependency-free Dart core for the offline CHW app: `pointInPolygon` (GPS village check)
+  and `paediatricDoseMg` — mirrors the server services so device and server agree offline.
+- `InMemoryOpLogDao` (concrete op-log) and a `dart:io`-based `SyncApi.push` that POSTs ops
+  with the `Idempotency-Key` header for safe replay.
+- Dart unit tests for the polygon check, dosing, and the sync-engine state transitions
+  (synced / conflict / pending / idempotent-no-double-push).
+- **Not verified in this environment** (no Flutter/Dart toolchain) — runs under `flutter test`
+  once a toolchain or CI runner is available.
+
 ### Added (Phase 2 — CHW offline, backend)
 - `community` app: `CHIC` record CHW visit (**idempotent** via `Idempotency-Key` for safe
   offline-op-log replay), `RFNW` create referral with a 6-digit tracking code (SMS stub),
