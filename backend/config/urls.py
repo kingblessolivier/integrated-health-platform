@@ -18,4 +18,5 @@ urlpatterns = [
     path("api/v1/", include("apps.surveillance.urls")),
     path("api/v1/", include("apps.diagnostics.urls")),
     path("api/v1/", include("apps.stock.urls")),
+    path("api/v1/", include("apps.hr.urls")),
 ]

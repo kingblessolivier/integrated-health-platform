@@ -5,6 +5,10 @@ on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### Added (HR & payroll)
+- `hr` app: `HRLC` licence-expiry tracking and `PYRN` payroll run. Pure, unit-tested
+  `compute_paye` (RRA progressive bands), `compute_rssb`, `net_pay`, and `licence_status`.
+
 ### Added (Stock & inventory)
 - `stock` app: `STIN` inquiry, `STRC` receive goods (batch/expiry + movement), `STEX` expiry
   monitoring (90/60/30 buckets). Pure, unit-tested `expiry_bucket` + `is_low_stock`; reuses

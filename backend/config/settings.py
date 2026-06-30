@@ -32,6 +32,7 @@ INSTALLED_APPS = [
     "apps.surveillance",
     "apps.diagnostics",
     "apps.stock",
+    "apps.hr",
 ]
 
 MIDDLEWARE = [
