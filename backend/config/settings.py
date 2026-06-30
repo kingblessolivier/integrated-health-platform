@@ -22,6 +22,8 @@ INSTALLED_APPS = [
     "apps.accounts",
     "apps.audit",
     "apps.patients",
+    "apps.clinical",
+    "apps.pharmacy",
 ]
 
 MIDDLEWARE = [

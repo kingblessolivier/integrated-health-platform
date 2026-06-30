@@ -8,4 +8,6 @@ urlpatterns = [
     path("api/v1/auth/token/", FourAxisTokenView.as_view(), name="token"),
     path("api/v1/auth/token/refresh/", TokenRefreshView.as_view(), name="token-refresh"),
     path("api/v1/", include("apps.patients.urls")),
+    path("api/v1/", include("apps.clinical.urls")),
+    path("api/v1/", include("apps.pharmacy.urls")),
 ]
