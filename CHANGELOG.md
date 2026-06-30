@@ -5,6 +5,13 @@ on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### Added (Phase 3 — Emergency, backend)
+- `emergency` app: `EMIN` SOS/intake creates a dispatch, `EMDS` assigns the nearest available
+  unit, `EMHO` handover marks arrival — all audited.
+- Pure, unit-tested dispatch logic: `haversine_km` and `nearest_unit` (the in-process
+  equivalent of the production PostGIS proximity query).
+- App registered, URLs wired, `seed_commands` extended with EM* codes.
+
 ### Added (Phase 2 — CHW offline, Flutter client core)
 - Dependency-free Dart core for the offline CHW app: `pointInPolygon` (GPS village check)
   and `paediatricDoseMg` — mirrors the server services so device and server agree offline.

@@ -30,6 +30,10 @@ MVP_COMMANDS = [
     ("RFNW", "Create referral (6-digit tracking code)"),
     ("RFRC", "Receive referral by code"),
     ("RFTR", "Track referral status"),
+    ("EMSO", "Patient SOS (one-tap, GPS)"),
+    ("EMIN", "Intake request (912 / SOS / transfer)"),
+    ("EMDS", "Dispatch nearest unit (PostGIS)"),
+    ("EMHO", "Handover to ED"),
     ("ANVW", "Role-scoped dashboard view"),
 ]
 
