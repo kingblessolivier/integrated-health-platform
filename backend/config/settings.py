@@ -27,6 +27,7 @@ INSTALLED_APPS = [
     "apps.billing",
     "apps.community",
     "apps.emergency",
+    "apps.claims",
 ]
 
 MIDDLEWARE = [

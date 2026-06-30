@@ -34,6 +34,11 @@ MVP_COMMANDS = [
     ("EMIN", "Intake request (912 / SOS / transfer)"),
     ("EMDS", "Dispatch nearest unit (PostGIS)"),
     ("EMHO", "Handover to ED"),
+    ("CLEL", "Eligibility check"),
+    ("CLSB", "Submit claim / batch"),
+    ("CLSC", "AI scrubbing queue"),
+    ("CLRV", "Review dispute"),
+    ("CLST", "Settlement status"),
     ("ANVW", "Role-scoped dashboard view"),
 ]
 
