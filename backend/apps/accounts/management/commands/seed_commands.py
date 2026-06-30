@@ -56,6 +56,9 @@ MVP_COMMANDS = [
     ("HRLC", "Licence / compliance tracking"),
     ("PYRN", "Run payroll"),
     ("PYDD", "Statutory deductions (PAYE / RSSB)"),
+    ("PBVW", "View PBF score"),
+    ("PBSC", "PBF scoring"),
+    ("PBAP", "Approve / trigger PBF payment"),
     ("ANVW", "Role-scoped dashboard view"),
 ]
 
