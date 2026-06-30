@@ -5,6 +5,14 @@ on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### Added (Phase 4 — Finance & Claims, backend)
+- `claims` app: `CLSC` run AI-scrubbing, `CLRV` review a disputed claim, `CLST` settlement
+  status — reusing the billing `Claim` model, all audited.
+- Pure, unit-tested pipeline logic: `advance` (claim state machine: submitted → scrubbing →
+  approved/disputed → paid/rejected, rejects invalid transitions) and `scrub` (amount/
+  diagnosis/match checks + high-amount-to-review routing).
+- App registered, URLs wired, `seed_commands` extended with CL* codes.
+
 ### Added (Phase 3 — Emergency, backend)
 - `emergency` app: `EMIN` SOS/intake creates a dispatch, `EMDS` assigns the nearest available
   unit, `EMHO` handover marks arrival — all audited.
