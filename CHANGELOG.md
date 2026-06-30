@@ -5,6 +5,16 @@ on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### Added (Phase 1 — Clinical Slice)
+- `clinical` app: command-bound encounter endpoints (`ENNW` open, `ENHX` list, `ENDX`
+  diagnosis with ICD-10 validation, `ENCL` close), each audited; pure `is_valid_icd` service
+  with unit tests.
+- `pharmacy` app: `RXNW` prescribe (signed, SMS code) and `RXDP` dispense under **FEFO** with
+  atomic stock decrement + stock movement + audit; pure `select_fefo` service with unit tests
+  (earliest-expiry, skips expired/zero-qty, includes expiring-today, empty cases).
+- `seed_commands` management command to populate the command catalogue (idempotent).
+- Registered both apps and wired their URLs under `/api/v1/`.
+
 ### Fixed
 - CI scaffolding (Phase 0): frontend build script (`tsc && vite build`) and
   `vitest --passWithNoTests`; backend `pytest.ini` + first unit tests (audit hash,
