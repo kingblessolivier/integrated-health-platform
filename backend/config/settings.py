@@ -28,6 +28,7 @@ INSTALLED_APPS = [
     "apps.community",
     "apps.emergency",
     "apps.claims",
+    "apps.interop",
 ]
 
 MIDDLEWARE = [

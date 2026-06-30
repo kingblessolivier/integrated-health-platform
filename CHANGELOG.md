@@ -5,6 +5,11 @@ on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### Added (Phase 5 — Interoperability, FHIR)
+- `interop` app: a pure, unit-tested HL7 **FHIR R4** mapping (`to_fhir_patient/encounter/
+  condition`, `build_patient_bundle`) + a command-bound `GET /fhir/patients/<id>/` export
+  (Patient + Encounters + Conditions bundle) + a DHIS2 push stub.
+
 ### Added (Auth bootstrap)
 - `bootstrap_user` management command: creates a Django auth user linked to a `staff` row +
   full command bundle, so `FourAxisTokenSerializer` issues real four-axis JWTs — closing the
