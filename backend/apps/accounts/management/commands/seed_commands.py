@@ -24,6 +24,12 @@ MVP_COMMANDS = [
     ("PHSP", "Insurer / patient split"),
     ("PHMM", "Mobile-money request-to-pay"),
     ("PHEB", "RRA EBM certified receipt"),
+    ("CHHH", "Household visit list"),
+    ("CHIC", "iCCM assessment (sick child)"),
+    ("CHRD", "RDT result + auto dose calc"),
+    ("RFNW", "Create referral (6-digit tracking code)"),
+    ("RFRC", "Receive referral by code"),
+    ("RFTR", "Track referral status"),
     ("ANVW", "Role-scoped dashboard view"),
 ]
 
