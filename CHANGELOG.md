@@ -5,6 +5,14 @@ on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### Added (Phase 2 — CHW offline, backend)
+- `community` app: `CHIC` record CHW visit (**idempotent** via `Idempotency-Key` for safe
+  offline-op-log replay), `RFNW` create referral with a 6-digit tracking code (SMS stub),
+  `RFRC` receive referral by code — all audited.
+- Pure, unit-tested services shared by server and the on-device offline app: `point_in_polygon`
+  (GPS village-polygon check), `generate_tracking_code`, `paediatric_dose_mg`.
+- App registered, URLs wired, `seed_commands` extended with CH*/RF* codes.
+
 ### Added (POS & Billing)
 - `billing` app: `PHPS` checkout that splits a total into insurer/out-of-pocket (`PHSP`),
   takes the co-payment via a MoMo stub (`PHMM`), issues an EBM certified-receipt token
