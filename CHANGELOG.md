@@ -5,6 +5,11 @@ on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### Added (Stock & inventory)
+- `stock` app: `STIN` inquiry, `STRC` receive goods (batch/expiry + movement), `STEX` expiry
+  monitoring (90/60/30 buckets). Pure, unit-tested `expiry_bucket` + `is_low_stock`; reuses
+  the pharmacy stock models.
+
 ### Added (Diagnostics — lab & imaging)
 - `diagnostics` app: lab flow (`LBOR` order → `LBRS` result with reference-interval flagging
   → `LBSN` sign-off) and imaging (`IMOR` order → `IMSN` signed report). Pure, unit-tested

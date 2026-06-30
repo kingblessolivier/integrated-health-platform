@@ -48,6 +48,10 @@ MVP_COMMANDS = [
     ("IMOR", "Order imaging"),
     ("IMRP", "Draft imaging report"),
     ("IMSN", "Sign imaging report"),
+    ("STIN", "Stock inquiry / levels"),
+    ("STRC", "Receive goods (batch / expiry)"),
+    ("STTR", "Inter-facility transfer"),
+    ("STEX", "Expiry monitoring (90/60/30)"),
     ("ANVW", "Role-scoped dashboard view"),
 ]
 
