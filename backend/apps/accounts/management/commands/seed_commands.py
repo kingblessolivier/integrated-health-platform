@@ -20,6 +20,10 @@ MVP_COMMANDS = [
     ("RXNW", "Prescribe (digital sign)"),
     ("RXVF", "Verify prescription (pharmacist)"),
     ("RXDP", "Dispense (FEFO + barcode)"),
+    ("PHPS", "Point-of-sale sale"),
+    ("PHSP", "Insurer / patient split"),
+    ("PHMM", "Mobile-money request-to-pay"),
+    ("PHEB", "RRA EBM certified receipt"),
     ("ANVW", "Role-scoped dashboard view"),
 ]
 

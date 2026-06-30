@@ -5,6 +5,15 @@ on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### Added (POS & Billing)
+- `billing` app: `PHPS` checkout that splits a total into insurer/out-of-pocket (`PHSP`),
+  takes the co-payment via a MoMo stub (`PHMM`), issues an EBM certified-receipt token
+  (`PHEB`), and queues an insurance claim when there's an insurer portion — one atomic,
+  audited operation.
+- Pure, unit-tested services: `split_payment` (exact-sum rounding, full/partial/zero
+  coverage, input validation), `issue_ebm_receipt`, `momo_request_to_pay`.
+- Registered the app, wired `/api/v1/checkout/`, and extended `seed_commands` with the PH* codes.
+
 ### Added (Phase 1 — Clinical Slice)
 - `clinical` app: command-bound encounter endpoints (`ENNW` open, `ENHX` list, `ENDX`
   diagnosis with ICD-10 validation, `ENCL` close), each audited; pure `is_valid_icd` service
