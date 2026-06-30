@@ -39,6 +39,8 @@ MVP_COMMANDS = [
     ("CLSC", "AI scrubbing queue"),
     ("CLRV", "Review dispute"),
     ("CLST", "Settlement status"),
+    ("SVMP", "Disease cluster map (real-time)"),
+    ("SVAL", "Outbreak alert / threshold"),
     ("ANVW", "Role-scoped dashboard view"),
 ]
 
