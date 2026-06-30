@@ -5,6 +5,17 @@ on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### Added (Verification harness)
+- `backend/e2e/run_slice.py`: a data-layer end-to-end harness that seeds a minimal dataset and
+  walks register → encounter → diagnosis → prescription → FEFO dispense → POS checkout → claim
+  scrub/approve against a **real Postgres**, asserting the key invariants — exercising the
+  actual schema, models, and business-logic services (no HTTP/JWT).
+- `.github/workflows/e2e.yml`: CI job (TimescaleDB service + schema apply + the harness),
+  using Postgres `trust` auth so there's no password literal.
+- `docs/65-running-and-verifying.md`: how to run unit tests + the live e2e, and an honest
+  "what's verified vs not" table, including the **HTTP/JWT auth-bootstrap gap** that blocks a
+  full curl-against-the-API run.
+
 ### Added (Phase 4 — Finance & Claims, backend)
 - `claims` app: `CLSC` run AI-scrubbing, `CLRV` review a disputed claim, `CLST` settlement
   status — reusing the billing `Claim` model, all audited.
