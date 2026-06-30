@@ -41,6 +41,13 @@ MVP_COMMANDS = [
     ("CLST", "Settlement status"),
     ("SVMP", "Disease cluster map (real-time)"),
     ("SVAL", "Outbreak alert / threshold"),
+    ("LBOR", "Order lab test"),
+    ("LBRS", "Lab result entry"),
+    ("LBSN", "Lab result sign-off"),
+    ("LBVW", "View lab results"),
+    ("IMOR", "Order imaging"),
+    ("IMRP", "Draft imaging report"),
+    ("IMSN", "Sign imaging report"),
     ("ANVW", "Role-scoped dashboard view"),
 ]
 

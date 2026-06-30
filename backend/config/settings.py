@@ -30,6 +30,7 @@ INSTALLED_APPS = [
     "apps.claims",
     "apps.interop",
     "apps.surveillance",
+    "apps.diagnostics",
 ]
 
 MIDDLEWARE = [
