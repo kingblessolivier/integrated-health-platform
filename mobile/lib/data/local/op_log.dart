@@ -32,3 +32,24 @@ abstract class OpLogDao {
   Future<List<Op>> pending();
   Future<void> setStatus(String clientOpId, OpStatus status);
 }
+
+/// In-memory implementation used in tests and as the seam a drift-backed DAO will replace.
+class InMemoryOpLogDao implements OpLogDao {
+  final List<Op> _ops = [];
+
+  @override
+  Future<void> append(Op op) async => _ops.add(op);
+
+  @override
+  Future<List<Op>> pending() async =>
+      _ops.where((o) => o.status == OpStatus.pending).toList();
+
+  @override
+  Future<void> setStatus(String clientOpId, OpStatus status) async {
+    for (final o in _ops) {
+      if (o.clientOpId == clientOpId) o.status = status;
+    }
+  }
+
+  List<Op> get all => List.unmodifiable(_ops);
+}
