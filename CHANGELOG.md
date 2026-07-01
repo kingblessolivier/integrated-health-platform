@@ -5,6 +5,14 @@ on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### Added (CBHI & supply chain — with `0002` migration)
+- `backend/sql/0002_domain_extensions.sql`: new tenant-scoped, RLS-protected tables —
+  `cbhi_members`, `cbhi_premiums`, `purchase_orders`, `purchase_order_lines`.
+- `cbhi` app: `CBEN` enrol, `CBPR` premium, `CBFB` fund balance (premiums − claims paid);
+  pure `fund_balance` service + tests.
+- `supply` app: `SCRO` reorder recommendation, `SCPO` purchase order, `SCRV` receive; pure
+  `reorder_quantity` service + tests.
+
 ### Added (Performance-Based Financing)
 - `pbf` app: `PBSC` weighted scoring + proportional payment and `PBAP` approval. Pure,
   unit-tested `compute_pbf_score` and `payment_for_score` (clamped). Command-bound + audited.
