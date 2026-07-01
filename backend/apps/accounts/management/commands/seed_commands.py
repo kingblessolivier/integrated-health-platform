@@ -68,6 +68,14 @@ MVP_COMMANDS = [
     ("SCRV", "Goods-receiving verify"),
     ("SCMP", "B2B marketplace browse"),
     ("SCNS", "National supply intelligence"),
+    ("RGDR", "Drug registration"),
+    ("RGPV", "Pharmacovigilance / ADR"),
+    ("RGRC", "Recall management"),
+    ("RGLC", "Licence registry"),
+    ("MTAN", "Antenatal visit"),
+    ("MTDL", "Delivery record"),
+    ("MTBR", "Birth registration"),
+    ("MTPN", "Postnatal follow-up"),
     ("ANVW", "Role-scoped dashboard view"),
 ]
 
