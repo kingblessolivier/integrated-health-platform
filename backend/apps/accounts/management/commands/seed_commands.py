@@ -76,6 +76,9 @@ MVP_COMMANDS = [
     ("MTDL", "Delivery record"),
     ("MTBR", "Birth registration"),
     ("MTPN", "Postnatal follow-up"),
+    ("SELK", "LOCK — terminate session / blacklist JWT"),
+    ("SESD", "Security dashboard"),
+    ("SEAN", "Anomaly / fraud alerts"),
     ("ANVW", "Role-scoped dashboard view"),
 ]
 

@@ -1,5 +1,12 @@
-from apps.accounts.access import in_geo_scope, sensitivity_ok
+from apps.accounts.access import filter_by_geo, in_geo_scope, sensitivity_ok
 from apps.accounts.permissions import HoldsCommand
+
+
+def test_filter_by_geo():
+    rows = [{"d": "Karongi"}, {"d": "Nyamasheke"}, {"d": "Karongi"}]
+    kept = filter_by_geo(rows, {"district": "Karongi"}, lambda r: {"district": r["d"]})
+    assert len(kept) == 2 and all(r["d"] == "Karongi" for r in kept)
+    assert len(filter_by_geo(rows, {}, lambda r: {"district": r["d"]})) == 3  # national
 
 
 def test_sensitivity_ok():

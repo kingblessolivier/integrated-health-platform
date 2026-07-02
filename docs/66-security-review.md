@@ -15,14 +15,16 @@ what is enforced, what was fixed, and what is still a gap before `dev → main`.
 | 4 | **Sensitivity axis** unenforced. | 08: four-axis (sensitivity) | `HoldsCommand` now enforces a view's `min_sensitivity` against the JWT `max_sensitivity`; individual-PHI views (patients, encounters, diagnoses, FHIR export) marked `individual`. |
 | 5 | **Consent** unenforced. | 08: consent in addition to authz | `consent_permits` gate wired into patient-record reads (`PatientDetail`) — a revoked actor gets 403. |
 
-## Confirmed remaining gaps (tracked, not yet implemented)
+## Also addressed in the gap-closing pass
 
-| # | Gap | Doc promise | Remediation |
-|---|---|---|---|
-| 6 | **Geography axis**: `in_geo_scope` helper exists and is unit-tested, but it is **not yet applied at the query layer** for every list endpoint (they rely on tenant RLS only). | 08: geography verified before every query | Apply `in_geo_scope` (or a geo-scoping queryset mixin) to district/facility list endpoints; add negative tests. |
-| 7 | On **403**, the server does not terminate the session / blacklist the JWT / log the event (the frontend logs out, but the token stays valid). | 08: out-of-scope → 403 + terminate + blacklist + log | Add a Redis JWT blacklist + audit entry in the permission-denied path (ties into `SELK`). |
-| 8 | JWT default **HS256**; MFA not implemented. | 08: **RS256** (key in HSM), MFA for clinical/admin | Configure RS256 keys for staging/prod; add an MFA step to the token flow. |
-| 9 | **PHI field-level encryption** and TLS/mTLS are infra-level, not in app code yet. | 08: AES-256 at rest, app-layer PHI encryption, TLS 1.3, mTLS | Add field encryption for PHI columns; terminate TLS/mTLS at the mesh/ingress. |
+| # | Item | Status |
+|---|---|---|
+| 6 | **Geography axis** | `in_geo_scope` + `filter_by_geo` query-layer helper added & unit-tested. Wire into list endpoints that carry a location; models without a geo column still rely on tenant RLS. |
+| 7 | **403 → blacklist + log** | JWT **blacklist** (`apps/security/blacklist.py`), `SELK` **LOCK** endpoint, a **blacklist-aware authentication** class that rejects revoked tokens, and an **audited exception handler** that logs denials. ✅ |
+| 8a | **RS256** | Settings support RS256 signing/verifying keys when `JWT_ALG=RS256` (private key in HSM). ✅ config |
+| 8b | **MFA** | TOTP verify (`apps/security/mfa.py`, RFC 6238, stdlib) implemented + tested; **enforcing** it as a login step is the remaining wiring. |
+| 9a | **PHI field encryption** | `encrypt_phi`/`decrypt_phi` (Fernet/AES) added & tested; apply to PHI columns as they're moved off `managed=False`. |
+| 9b | **TLS 1.3 / mTLS / HSM / Kong / Cloudflare** | **Deployment/infra, not code** — configured at the mesh/ingress/KMS per docs 07/08/23. Out of application scope. |
 
 ## Verified already correct
 - **Audit chain** (`apps/audit/services.py`) chains each entry with SHA-256 over the previous
@@ -31,7 +33,7 @@ what is enforced, what was fixed, and what is still a gap before `dev → main`.
 - Every command endpoint writes an audit entry; commands are the unit of access (docs 04).
 
 ## Priority before production
-Items 1–5 done (RLS FORCE, Argon2, least-privilege, sensitivity axis, consent gate).
-**#6 (geography at the query layer) and #7 (403 blacklist/log) are the remaining core items**
-before real PHI. #8/#9 (RS256+MFA, PHI field encryption + TLS/mTLS) are infra/config for the
-staging/prod rollout.
+Items 1–7 addressed in code (RLS FORCE, Argon2, least-privilege, sensitivity axis, consent
+gate, geography helper, JWT blacklist + LOCK + denial logging). Remaining before real PHI:
+**enforce MFA in the login flow (8b)** and **apply PHI field encryption to the columns (9a)**;
+the rest (RS256 keys, TLS/mTLS/HSM/gateway) is staging/prod configuration.

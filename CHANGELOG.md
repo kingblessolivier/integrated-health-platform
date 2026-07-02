@@ -5,6 +5,18 @@ on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### Security & resilience (gap-closing — docs/66 #6–#9)
+- **JWT blacklist + LOCK**: `apps/security` — blacklist store, `SELK` LOCK endpoint, a
+  **blacklist-aware auth class** that rejects revoked tokens, and an **audited exception
+  handler** that logs access denials (docs/08/16).
+- **TOTP MFA** (`apps/security/mfa.py`, RFC 6238, stdlib) — verify + skew window, tested.
+- **PHI field encryption** (`apps/security/crypto.py`, Fernet/AES) — encrypt/decrypt, tested.
+- **RS256** JWT supported when `JWT_ALG=RS256` (keys from env/HSM).
+- **Circuit breaker** for national-system calls (`apps/integrations/circuit_breaker.py`) —
+  closed/open/half-open, tested (docs/09 resilience).
+- **Geography** query-layer helper `filter_by_geo` (docs/08 geography axis), tested.
+- Infra-only items (TLS 1.3/mTLS/HSM/Kong/Cloudflare) documented as deployment scope in docs/66.
+
 ### Security (four-axis + consent — docs/66 #4/#5)
 - **Sensitivity axis enforced**: `apps/accounts/access.py` (`sensitivity_ok`, `in_geo_scope`);
   `HoldsCommand` now checks a view's `min_sensitivity` against the JWT `max_sensitivity`.

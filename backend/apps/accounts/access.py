@@ -25,3 +25,9 @@ def in_geo_scope(target: dict, scope: dict) -> bool:
         if target.get(level) != value:
             return False
     return True
+
+
+def filter_by_geo(rows, scope, geo_of):
+    """Keep only rows whose location (via `geo_of(row) -> dict`) is within `scope`.
+    A query-layer geography filter for list endpoints (docs/08 geography axis)."""
+    return [row for row in rows if in_geo_scope(geo_of(row), scope)]

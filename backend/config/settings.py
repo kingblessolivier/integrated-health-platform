@@ -39,6 +39,8 @@ INSTALLED_APPS = [
     "apps.supply",
     "apps.regulatory",
     "apps.maternity",
+    "apps.integrations",
+    "apps.security",
 ]
 
 MIDDLEWARE = [
@@ -65,9 +67,10 @@ DATABASES = {
 
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": (
-        "rest_framework_simplejwt.authentication.JWTAuthentication",
+        "apps.security.authentication.BlacklistAwareJWTAuthentication",
     ),
     "DEFAULT_PERMISSION_CLASSES": ("apps.accounts.permissions.HoldsCommand",),
+    "EXCEPTION_HANDLER": "apps.security.exceptions.audited_exception_handler",
 }
 
 # JWT carries the four-axis scope (role/commands, geo, tenant, sensitivity). RS256 in prod.
@@ -76,6 +79,11 @@ SIMPLE_JWT = {
     "REFRESH_TOKEN_LIFETIME": timedelta(hours=8),
     "ALGORITHM": env("JWT_ALG", default="HS256"),  # switch to RS256 with keys in prod
 }
+
+# In production set JWT_ALG=RS256 and provide the keys (private key stays in the HSM, docs/08).
+if SIMPLE_JWT["ALGORITHM"] == "RS256":
+    SIMPLE_JWT["SIGNING_KEY"] = env("JWT_PRIVATE_KEY", default="")
+    SIMPLE_JWT["VERIFYING_KEY"] = env("JWT_PUBLIC_KEY", default="")
 
 # Argon2id password hashing (docs/08) — memory-hard, GPU-resistant.
 PASSWORD_HASHERS = [
