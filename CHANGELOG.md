@@ -5,6 +5,19 @@ on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### Frontend — first vertical slice (login → command-gated screen → MFA)
+- **Login** (`features/login`) → `POST /auth/token/`, decodes the four-axis JWT claims into
+  the Zustand session; reveals an OTP field and resubmits on `mfa_required`.
+- **JWT claim decode** (`lib/auth/jwt.ts`) + session store with localStorage persistence and
+  typed logout reasons; unit-tested (vitest, 8 tests).
+- **Patients screen** (`features/patients`) — search (`PTSR`) + register (`PTRG`) wired
+  through the `api()` client with TanStack Query; each action shown only if the user holds
+  the command (server still re-checks).
+- **MFA enrolment UI** (`features/mfa`) — enrol → show secret/`otpauth_uri` → confirm.
+- Auth-gated `App` shell with simple view switching + sign-out; `Field` UI primitive.
+- Verified: strict `tsc` + `vite build` pass; app boots in headless Chromium and renders the
+  login screen. (Full login→API path needs the backend running.)
+
 ### MFA self-service enrolment (completes the docs/66 8b flow)
 - `POST /auth/mfa/enrol/` — mints a 160-bit TOTP secret, returns it with the `otpauth://`
   provisioning URI (client renders the QR). Refuses (`409`) if a confirmed device exists —
