@@ -17,36 +17,52 @@ export function MfaScreen() {
   });
 
   if (done) {
-    return <p style={{ color: "var(--color-success)" }}>✅ MFA is now active on your account.</p>;
+    return (
+      <div className="card" style={{ maxWidth: 520 }}>
+        <div className="empty">
+          <div className="empty__icon">✅</div>
+          <div className="empty__title">Two-factor authentication is active</div>
+          <div className="empty__hint">You'll be asked for a code from your app at every sign-in.</div>
+        </div>
+      </div>
+    );
   }
 
   return (
-    <section style={{ maxWidth: 480 }}>
-      <h3>Set up two-factor authentication</h3>
+    <div className="card" style={{ maxWidth: 520 }}>
+      <h3 className="card__title">Set up two-factor authentication</h3>
       {!enrolment ? (
         <>
-          <p style={{ color: "var(--color-text-secondary)" }}>
-            Generate a secret, add it to an authenticator app (Google Authenticator, Authy…),
-            then confirm a code to activate.
+          <p className="card__subtitle">
+            Generate a secret, add it to an authenticator app (Google Authenticator, Authy…), then
+            confirm a code to activate.
           </p>
-          <button onClick={() => enrol.mutate()} disabled={enrol.isPending}>
+          <button className="btn btn--primary" onClick={() => enrol.mutate()} disabled={enrol.isPending}>
             {enrol.isPending ? "Generating…" : "Begin enrolment"}
           </button>
           {enrol.isError && (
-            <p role="alert" style={{ color: "var(--color-danger)" }}>
-              Could not start enrolment (already enrolled? ask an administrator to reset).
-            </p>
+            <div className="alert alert--error" role="alert">
+              Could not start enrolment — you may already be enrolled. Ask an administrator to reset.
+            </div>
           )}
         </>
       ) : (
         <>
-          <p>Add this account to your authenticator app:</p>
-          <p>
-            <strong>Secret:</strong> <code>{enrolment.secret}</code>
-          </p>
-          <p style={{ wordBreak: "break-all", fontSize: 12, color: "var(--color-text-secondary)" }}>
-            <a href={enrolment.otpauth_uri}>{enrolment.otpauth_uri}</a>
-          </p>
+          <div className="alert alert--info">Add this account to your authenticator app, then confirm below.</div>
+          <table className="kv" style={{ marginBottom: "var(--s-4)" }}>
+            <tbody>
+              <tr>
+                <td>Secret</td>
+                <td><code>{enrolment.secret}</code></td>
+              </tr>
+              <tr>
+                <td>otpauth URI</td>
+                <td style={{ wordBreak: "break-all" }}>
+                  <a href={enrolment.otpauth_uri}>{enrolment.otpauth_uri}</a>
+                </td>
+              </tr>
+            </tbody>
+          </table>
           <form
             onSubmit={(e) => {
               e.preventDefault();
@@ -60,17 +76,17 @@ export function MfaScreen() {
               onChange={(e) => setOtp(e.target.value)}
               required
             />
-            <button type="submit" disabled={confirm.isPending}>
+            <button type="submit" className="btn btn--primary" disabled={confirm.isPending}>
               {confirm.isPending ? "Confirming…" : "Confirm & activate"}
             </button>
             {confirm.isError && (
-              <p role="alert" style={{ color: "var(--color-danger)" }}>
+              <div className="alert alert--error" role="alert">
                 Invalid code — try the current one from your app.
-              </p>
+              </div>
             )}
           </form>
         </>
       )}
-    </section>
+    </div>
   );
 }

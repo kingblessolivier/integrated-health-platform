@@ -5,6 +5,20 @@ on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### Frontend — design system & app shell
+- Real visual design over the tokens (`theme/tokens.css` expanded: spacing scale, elevation,
+  radii, focus ring; new `theme/app.css` component layer). Replaced bare/unstyled markup.
+- **App shell**: fixed teal sidebar (brand + workspace nav + commands-held count), sticky top
+  bar with a user chip/avatar and sign-out, and a padded content area with page headings.
+- **Login**: centered branded card with a subtle gradient, inline alerts, block primary button.
+- **Command palette**: search + domain-grouped tiles, command badges and colour-coded
+  GET/POST method chips; the selected action opens a clean form panel with a friendly empty
+  state when nothing is picked.
+- **Results** render as key–value tables (with list-envelope handling) instead of raw JSON;
+  Patients search shows a table; consistent alerts and empty states throughout.
+- Verified in headless Chromium (login + authenticated shell screenshots); 21 vitest tests and
+  strict `tsc` + `vite build` still pass.
+
 ### Frontend — command runner over the full API surface
 - **Declarative command registry** (`lib/commands/registry.ts`) mirroring every command-bound
   endpoint the backend exposes today (~40 actions across 17 domains — patients, clinical,
