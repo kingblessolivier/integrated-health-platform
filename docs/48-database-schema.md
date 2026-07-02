@@ -566,6 +566,8 @@ Later domains add tables in [`backend/sql/0002_domain_extensions.sql`](../backen
 |---|---|
 | `cbhi_members` / `cbhi_premiums` | CBHI/mutuelle enrolment and premium collections |
 | `purchase_orders` / `purchase_order_lines` | B2B supply-chain purchase orders |
+| `drug_registrations` / `adverse_events` (`0003`) | Rwanda FDA registration + pharmacovigilance (national) |
+| `deliveries` / `births` (`0003`) | Maternity records feeding civil registration |
 
 ## Seeding & migration notes
 

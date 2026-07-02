@@ -5,6 +5,14 @@ on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### Added (Regulatory & maternity — with `0003` migration)
+- `backend/sql/0003_regulatory_maternity.sql`: `drug_registrations`, `adverse_events`
+  (national) and `deliveries`, `births` (tenant-scoped + RLS).
+- `regulatory` app: `RGDR` register drug, `RGPV` report ADR, `RGRC` recall; pure
+  `registration_status` service + tests.
+- `maternity` app: `MTDL` delivery, `MTBR` birth registration (flags birth weight); pure
+  `classify_birth_weight` service + tests.
+
 ### Added (CBHI & supply chain — with `0002` migration)
 - `backend/sql/0002_domain_extensions.sql`: new tenant-scoped, RLS-protected tables —
   `cbhi_members`, `cbhi_premiums`, `purchase_orders`, `purchase_order_lines`.

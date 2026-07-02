@@ -22,4 +22,6 @@ urlpatterns = [
     path("api/v1/", include("apps.pbf.urls")),
     path("api/v1/", include("apps.cbhi.urls")),
     path("api/v1/", include("apps.supply.urls")),
+    path("api/v1/", include("apps.regulatory.urls")),
+    path("api/v1/", include("apps.maternity.urls")),
 ]

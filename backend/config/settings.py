@@ -36,6 +36,8 @@ INSTALLED_APPS = [
     "apps.pbf",
     "apps.cbhi",
     "apps.supply",
+    "apps.regulatory",
+    "apps.maternity",
 ]
 
 MIDDLEWARE = [
