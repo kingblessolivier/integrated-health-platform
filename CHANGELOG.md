@@ -5,6 +5,15 @@ on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### Security (MFA enforcement + PHI encryption — docs/66 #8b/#9a)
+- **TOTP MFA enforced at login**: `FourAxisTokenSerializer.validate` requires a valid `otp`
+  for any user with a confirmed `MfaDevice` (`apps/security/models.py` + `sql/0004_security.sql`
+  `mfa_devices`), applied after password auth, else raises `mfa_required`. Users without a
+  confirmed device are unaffected until they enrol.
+- **PHI field encryption applied**: `EncryptedTextField` (`apps/security/fields.py`)
+  transparently Fernet-encrypts on write / decrypts on read, now on `Diagnosis.note`; tolerant
+  of NULL and legacy plaintext for in-place migration. Field roundtrip tested.
+
 ### Security & resilience (gap-closing — docs/66 #6–#9)
 - **JWT blacklist + LOCK**: `apps/security` — blacklist store, `SELK` LOCK endpoint, a
   **blacklist-aware auth class** that rejects revoked tokens, and an **audited exception

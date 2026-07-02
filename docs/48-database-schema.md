@@ -571,6 +571,7 @@ Later domains add tables in [`backend/sql/0002_domain_extensions.sql`](../backen
 | `purchase_orders` / `purchase_order_lines` | B2B supply-chain purchase orders |
 | `drug_registrations` / `adverse_events` (`0003`) | Rwanda FDA registration + pharmacovigilance (national) |
 | `deliveries` / `births` (`0003`) | Maternity records feeding civil registration |
+| `mfa_devices` (`0004`) | TOTP MFA enrolment keyed to `auth_user` (auth-scoped, no tenant RLS); gates login enforcement (docs/08, docs/66 8b) |
 
 ## Seeding & migration notes
 
