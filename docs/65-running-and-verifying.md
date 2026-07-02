@@ -37,17 +37,33 @@ schema apply + `python -m e2e.run_slice`) — once GitHub Actions is enabled on 
 
 ## Known gap — HTTP + JWT end-to-end
 
-The data-layer harness deliberately **bypasses the HTTP/JWT layer**. A full
-`curl`-against-the-API run isn't possible yet because authentication isn't bootstrapped:
+The data-layer harness bypasses HTTP/JWT, but the API itself **can now be driven with real
+tokens** via the auth bootstrap. `FourAxisTokenSerializer` authenticates a Django auth user
+and maps it (by username == `nida_id`) to a `staff` row + command bundle.
 
-- `FourAxisTokenSerializer` authenticates a Django auth user and maps it to a `staff` row,
-  but `backend/sql/0001_initial.sql` does not create `django.contrib.auth` tables and there
-  is no custom-user migration.
+```bash
+cd backend && . .venv/bin/activate
+# domain schema (managed=False tables) + auth tables
+psql "postgresql://inhp:$POSTGRES_PASSWORD@localhost:5432/inhp" -f sql/0001_initial.sql
+python manage.py migrate                       # creates django.contrib.auth tables
+python manage.py seed_commands                 # the command catalogue
+python manage.py bootstrap_user --nida 1199900000000001   # prints a random password
 
-**Follow-up to close it:** either add the `contrib.auth`/`contenttypes` migrations (or a
-custom user model) to the migration path, add a `createsuperuser`-style bootstrap that links
-a user to a `staff` row + command bundle, then the API can issue real JWTs and the same slice
-can be exercised over HTTP. Tracked as the next verification increment.
+python manage.py runserver
+```
+
+Then exercise the API over HTTP:
+
+```bash
+# get a JWT (carries tenant/geo/sensitivity + the command bundle)
+TOKEN=$(curl -s localhost:8000/api/v1/auth/token/ \
+  -H 'Content-Type: application/json' \
+  -d '{"username":"1199900000000001","password":"<printed-password>"}' | jq -r .access)
+
+# register a patient (PTRG) — and so on through the slice
+curl -s localhost:8000/api/v1/patients/ -H "Authorization: Bearer $TOKEN" \
+  -H 'Content-Type: application/json' -d '{"nida_id":"1199900000000002"}'
+```
 
 ## What's verified vs. not
 
@@ -55,5 +71,5 @@ can be exercised over HTTP. Tracked as the next verification increment.
 |---|---|
 | Business-logic services (FEFO, split, scrub, state machine, polygon, dosing) | ✅ unit tests |
 | Schema + models + services against real Postgres | ✅ `e2e/run_slice.py` (run via Docker/CI) |
-| HTTP API + four-axis JWT auth, end-to-end | ⛔ blocked on auth bootstrap (above) |
+| HTTP API + four-axis JWT auth, end-to-end | 🟡 bootstrappable (`migrate` + `bootstrap_user`); needs a live run to confirm |
 | Mobile (Flutter) | ⛔ needs a Flutter toolchain to run `flutter test` |

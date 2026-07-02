@@ -5,6 +5,13 @@ on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### Added (Auth bootstrap)
+- `bootstrap_user` management command: creates a Django auth user linked to a `staff` row +
+  full command bundle, so `FourAxisTokenSerializer` issues real four-axis JWTs — closing the
+  HTTP/JWT gap from doc 65. Generates/prints a random password (no secrets in code).
+- `docs/65` updated with the HTTP path (`migrate` → `seed_commands` → `bootstrap_user` →
+  token → curl) and the verified-vs-not table now marks the API as bootstrappable.
+
 ### Added (Verification harness)
 - `backend/e2e/run_slice.py`: a data-layer end-to-end harness that seeds a minimal dataset and
   walks register → encounter → diagnosis → prescription → FEFO dispense → POS checkout → claim
