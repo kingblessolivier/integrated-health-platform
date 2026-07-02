@@ -5,6 +5,15 @@ on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### MFA self-service enrolment (completes the docs/66 8b flow)
+- `POST /auth/mfa/enrol/` — mints a 160-bit TOTP secret, returns it with the `otpauth://`
+  provisioning URI (client renders the QR). Refuses (`409`) if a confirmed device exists —
+  replacing one is an admin reset, not self-service. Tier 2: any authenticated user.
+- `POST /auth/mfa/confirm/` — a valid code flips the device to confirmed; from then on
+  login demands an OTP. Both endpoints audited (`MFAE`/`MFAC`).
+- Pure helpers `generate_secret` / `provisioning_uri` in `apps/security/mfa.py`, tested.
+- docs/49 conventions updated for the three access tiers + MFA endpoints.
+
 ### Backend admin/runtime hardening
 - Enabled Django admin for the backend app set and registered the model-bearing apps.
 - Fixed local backend startup on the current development environment: `TEMPLATES` and `STATIC_URL`

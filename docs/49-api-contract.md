@@ -1,8 +1,10 @@
 # 49 — API Contract
 
-How clients talk to the platform. Every endpoint maps to exactly one **command** (doc 03)
-and is governed by the four-axis model (doc 04). This is the contract dev teams build against;
-the canonical machine-readable spec is an **OpenAPI 3.1** document generated from the
+How clients talk to the platform. Endpoints follow the three access tiers of doc 04 —
+public (`/auth/token`, refresh, health), authenticated-no-command (own profile, reference
+data, MFA enrolment), and command-gated, where the endpoint maps to exactly one **command**
+(doc 03) under the four-axis model. This is the contract dev teams build against; the
+canonical machine-readable spec is an **OpenAPI 3.1** document generated from the
 Django REST / FastAPI serializers.
 
 ## Conventions
@@ -10,9 +12,13 @@ Django REST / FastAPI serializers.
 - Base path: `/api/v1`. Versioning policy: [38 — API Versioning](38-api-versioning-and-deprecation.md).
 - Auth: `Authorization: Bearer <JWT>` (RS256) on every request. The JWT carries
   `role/commands`, `geo_scope`, `tenant_id`, `max_sensitivity`.
-- Command binding: each request resolves to a command code; the server checks the caller
-  **holds** it before executing. Missing → `403`, session terminated, token blacklisted,
-  event logged.
+- Command binding: a **command-gated** request resolves to a command code; the server checks
+  the caller **holds** it before executing. Missing → `403`, session terminated, token
+  blacklisted, event logged. Tier-2 endpoints need only a valid token.
+- MFA: `POST /auth/mfa/enrol/` mints a TOTP secret (returns `secret` + `otpauth_uri`; `409`
+  if already enrolled — admin reset required); `POST /auth/mfa/confirm/` `{otp}` proves the
+  authenticator and activates enforcement. From then on `POST /auth/token/` requires `otp`
+  alongside the credentials, else `401 mfa_required`.
 - Content type: `application/json`; resource names plural kebab-case (`/stock-items`).
 - Idempotency: unsafe writes accept an `Idempotency-Key` header (critical for offline replay).
 - Pagination: cursor-based — `?limit=&cursor=`; responses include `next_cursor`.

@@ -5,8 +5,10 @@ unit-tested — no third-party dependency.
 import base64
 import hashlib
 import hmac
+import secrets
 import struct
 import time
+from urllib.parse import quote
 
 
 def _hotp(secret_b32: str, counter: int, digits: int = 6) -> str:
@@ -30,3 +32,16 @@ def verify_totp(secret_b32: str, code: str, at: float | None = None,
     counter = int(at // step)
     return any(_hotp(secret_b32, counter + i) == str(code).zfill(6)
                for i in range(-window, window + 1))
+
+
+def generate_secret(nbytes: int = 20) -> str:
+    """Random base32 TOTP secret — 20 bytes = 160 bits (RFC 4226 §4 recommends ≥128)."""
+    return base64.b32encode(secrets.token_bytes(nbytes)).decode().rstrip("=")
+
+
+def provisioning_uri(secret_b32: str, account: str, issuer: str = "INHP") -> str:
+    """otpauth:// URI for authenticator apps (rendered as a QR by the client)."""
+    return (
+        f"otpauth://totp/{quote(issuer)}:{quote(account)}"
+        f"?secret={secret_b32}&issuer={quote(issuer)}&algorithm=SHA1&digits=6&period=30"
+    )
