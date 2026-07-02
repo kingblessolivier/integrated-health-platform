@@ -16,10 +16,14 @@ DEBUG = env("DEBUG", default=True)
 ALLOWED_HOSTS = env.list("ALLOWED_HOSTS", default=["*"])
 
 INSTALLED_APPS = [
+    "django.contrib.admin",
     "django.contrib.contenttypes",
     "django.contrib.auth",
+    "django.contrib.sessions",
+    "django.contrib.messages",
+    "django.contrib.staticfiles",
     "rest_framework",
-    "apps.accounts",
+    "apps.accounts.apps.AccountsConfig",
     "apps.audit",
     "apps.consent",
     "apps.patients",
@@ -45,7 +49,11 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
+    "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
+    "django.middleware.csrf.CsrfViewMiddleware",
+    "django.contrib.auth.middleware.AuthenticationMiddleware",
+    "django.contrib.messages.middleware.MessageMiddleware",
     # Sets PostgreSQL session GUCs (app.tenant_id/user_id) so RLS applies per request.
     "apps.common.middleware.TenantContextMiddleware",
 ]
@@ -54,15 +62,26 @@ ROOT_URLCONF = "config.urls"
 WSGI_APPLICATION = "config.wsgi.application"
 ASGI_APPLICATION = "config.asgi.application"
 
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": env("POSTGRES_DB", default="inhp"),
-        "USER": env("POSTGRES_USER", default="inhp"),
-        "PASSWORD": env("POSTGRES_PASSWORD", default="inhp"),
-        "HOST": env("POSTGRES_HOST", default="localhost"),
-        "PORT": env("POSTGRES_PORT", default="5432"),
+TEMPLATES = [
+    {
+        "BACKEND": "django.template.backends.django.DjangoTemplates",
+        "DIRS": [],
+        "APP_DIRS": True,
+        "OPTIONS": {
+            "context_processors": [
+                "django.template.context_processors.request",
+                "django.contrib.auth.context_processors.auth",
+                "django.contrib.messages.context_processors.messages",
+            ],
+        },
     }
+]
+
+DATABASES = {
+    "default": env.db(
+        "DATABASE_URL",
+        default=f"postgres://{env('POSTGRES_USER', default='inhp')}:{env('POSTGRES_PASSWORD', default='inhp')}@{env('POSTGRES_HOST', default='localhost')}:{env('POSTGRES_PORT', default='5432')}/{env('POSTGRES_DB', default='inhp')}",
+    )
 }
 
 REST_FRAMEWORK = {
@@ -102,4 +121,5 @@ CELERY_BROKER_URL = env("REDIS_URL", default="redis://localhost:6379/0")
 LANGUAGE_CODE = "en"
 TIME_ZONE = "Africa/Kigali"
 USE_TZ = True
+STATIC_URL = "static/"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"

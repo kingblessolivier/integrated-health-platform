@@ -35,6 +35,7 @@ class Staff(models.Model):
 
 
 class UserCommand(models.Model):
+    id = models.BigAutoField(primary_key=True)
     staff = models.ForeignKey(Staff, on_delete=models.DO_NOTHING, db_column="staff_id")
     command = models.ForeignKey(Command, on_delete=models.DO_NOTHING, db_column="command")
 

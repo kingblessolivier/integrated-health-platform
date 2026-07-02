@@ -55,9 +55,11 @@ CREATE TABLE staff (
     updated_at TIMESTAMPTZ NOT NULL DEFAULT now());
 CREATE INDEX idx_staff_tenant ON staff(tenant_id);
 CREATE TABLE user_commands (
+    id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     staff_id UUID NOT NULL REFERENCES staff(id) ON DELETE CASCADE,
     command CHAR(4) NOT NULL REFERENCES commands(code), granted_by UUID REFERENCES staff(id),
-    granted_at TIMESTAMPTZ NOT NULL DEFAULT now(), PRIMARY KEY (staff_id, command));
+    granted_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+    UNIQUE (staff_id, command));
 CREATE TABLE consents (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(), tenant_id UUID NOT NULL REFERENCES tenants(id),
     patient_id UUID NOT NULL, actor_scope JSONB NOT NULL, status consent_status NOT NULL DEFAULT 'granted',

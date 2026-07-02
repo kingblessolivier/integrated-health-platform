@@ -12,10 +12,11 @@ Thanks for your interest in the Integrated National Health Platform.
 
 ## Workflow
 
-1. Create a feature branch off `main`.
-2. Make your change (docs or code).
-3. Open a pull request describing what changed and why.
-4. At least one review is required before merge; squash-and-merge is preferred.
+1. Create a working branch off `dev`.
+2. Make your change (docs or code) and check it thoroughly on your branch.
+3. Open a pull request to merge into `dev`; do not push directly to `dev`.
+4. After `dev` has been checked, open a pull request from `dev` into `main`.
+5. At least one review is required before each merge; squash-and-merge is preferred.
 
 ## Design & architecture decisions
 

@@ -5,6 +5,14 @@ on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### Backend admin/runtime hardening
+- Enabled Django admin for the backend app set and registered the model-bearing apps.
+- Fixed local backend startup on the current development environment: `TEMPLATES` and `STATIC_URL`
+  were added, the `user_commands` join table now has a real primary key, and the live database
+  was aligned with the ORM so `/api/v1/auth/token/` and `/admin/auth/user/` both work.
+- Added the compatibility workaround needed for Django template context copying under the
+  current Python runtime used in this workspace.
+
 ### Access model — three tiers (not everything is command-gated)
 - `HoldsCommand` now requires **authentication by default** and enforces a command **only**
   when a view declares `required_command`. Ordinary authenticated use ("the app works
