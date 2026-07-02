@@ -14,6 +14,7 @@ from .services import build_patient_bundle
 
 class PatientFhirExport(APIView):
     required_command = "PTVW"
+    min_sensitivity = "individual"
 
     def get(self, request, patient_id):
         patient = Patient.objects.filter(id=patient_id).first()

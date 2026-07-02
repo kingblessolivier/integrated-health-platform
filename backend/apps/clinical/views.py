@@ -17,6 +17,7 @@ from .services import is_valid_icd
 class EncounterListCreate(generics.ListCreateAPIView):
     serializer_class = EncounterSerializer
     queryset = Encounter.objects.all()
+    min_sensitivity = "individual"
 
     @property
     def required_command(self):
@@ -32,6 +33,7 @@ class EncounterListCreate(generics.ListCreateAPIView):
 class DiagnosisCreate(generics.CreateAPIView):
     serializer_class = DiagnosisSerializer
     required_command = "ENDX"
+    min_sensitivity = "individual"
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
