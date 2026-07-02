@@ -37,11 +37,13 @@ class Command(BaseCommand):
         password = opts.get("password") or secrets.token_urlsafe(12)
 
         tenant_id = opts.get("tenant")
-        if not tenant_id:
-            with connection.cursor() as cur:
+        with connection.cursor() as cur:
+            if not tenant_id:
                 cur.execute("INSERT INTO tenants(name, kind) VALUES ('Demo Tenant','facility') "
                             "RETURNING id")
                 tenant_id = cur.fetchone()[0]
+            # RLS is FORCEd, so set the tenant GUC before touching tenant-scoped tables.
+            cur.execute("SELECT set_config('app.tenant_id', %s, false)", [str(tenant_id)])
 
         staff, _ = Staff.objects.get_or_create(
             nida_id=nida, defaults={"tenant_id": tenant_id, "full_name": opts["name"]})
@@ -51,10 +53,12 @@ class Command(BaseCommand):
             _, made = UserCommand.objects.get_or_create(staff_id=staff.id, command_id=code)
             granted += int(made)
 
+        # Least privilege (docs/08): a normal login, not a Django superuser. Access is granted
+        # entirely by the command bundle above.
         user, _ = user_model.objects.get_or_create(username=nida)
         user.set_password(password)
-        user.is_staff = True
-        user.is_superuser = True
+        user.is_staff = False
+        user.is_superuser = False
         user.save()
 
         self.stdout.write(self.style.SUCCESS(

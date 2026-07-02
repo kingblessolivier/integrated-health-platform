@@ -76,6 +76,12 @@ SIMPLE_JWT = {
     "ALGORITHM": env("JWT_ALG", default="HS256"),  # switch to RS256 with keys in prod
 }
 
+# Argon2id password hashing (docs/08) — memory-hard, GPU-resistant.
+PASSWORD_HASHERS = [
+    "django.contrib.auth.hashers.Argon2PasswordHasher",
+    "django.contrib.auth.hashers.PBKDF2PasswordHasher",
+]
+
 CACHES = {
     "default": {
         "BACKEND": "django.core.cache.backends.redis.RedisCache",
