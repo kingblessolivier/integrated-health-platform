@@ -1,9 +1,11 @@
 import { useState } from "react";
 import { CommandBar } from "./components/CommandBar/CommandBar";
+import { ActionRunner } from "./features/command/ActionRunner";
 import { LoginScreen } from "./features/login/LoginScreen";
 import { MfaScreen } from "./features/mfa/MfaScreen";
 import { PatientsScreen } from "./features/patients/PatientsScreen";
 import { useAuthStore } from "./lib/auth/store";
+import type { ActionSpec } from "./lib/commands/types";
 
 type View = "home" | "patients" | "mfa";
 
@@ -13,6 +15,7 @@ export function App() {
   const userId = useAuthStore((s) => s.userId);
   const forceLogout = useAuthStore((s) => s.forceLogout);
   const [view, setView] = useState<View>("home");
+  const [action, setAction] = useState<ActionSpec | null>(null);
 
   if (!token) return <LoginScreen />;
 
@@ -52,7 +55,18 @@ export function App() {
         </button>
       </nav>
 
-      {view === "home" && <CommandBar />}
+      {view === "home" && (
+        <div style={{ display: "grid", gap: 24, gridTemplateColumns: "minmax(280px, 1fr) 1fr", alignItems: "start" }}>
+          <CommandBar onSelect={setAction} />
+          {action ? (
+            <ActionRunner spec={action} />
+          ) : (
+            <p style={{ color: "var(--color-text-secondary)" }}>
+              Pick a command to run it. Only the commands you hold are shown.
+            </p>
+          )}
+        </div>
+      )}
       {view === "patients" && <PatientsScreen />}
       {view === "mfa" && <MfaScreen />}
     </main>
