@@ -79,6 +79,7 @@ MVP_COMMANDS = [
     ("SELK", "LOCK — terminate session / blacklist JWT"),
     ("SESD", "Security dashboard"),
     ("SEAN", "Anomaly / fraud alerts"),
+    ("SEMR", "MFA reset — clear a user's TOTP device (admin)"),
     ("ANVW", "Role-scoped dashboard view"),
 ]
 
