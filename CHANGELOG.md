@@ -5,6 +5,22 @@ on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### Frontend — unified command-driven dashboard (docs 06/50)
+- **⌘K command palette**: keyboard-activated (⌘K/Ctrl-K) modal, entitlement-filtered, ranked
+  (exact/prefix code → label/domain), arrow-navigable, with recents; pure `rankCommands`/
+  `groupByDomain` helpers (tested).
+- **"Your scope" line**: persistent four-axis window (sensitivity · tenant · geography)
+  decoded from the JWT (`geo_scope` now surfaced by the auth store) — docs/06 "scope is visible".
+- **Command-generated left nav**: workspace items + a Domains section built from the commands
+  the user holds, with per-domain counts.
+- **Three rendering modes** (one engine): ANVW **dashboard** (KPI cards that live-fetch the
+  analytics endpoints the user holds — honest "—/Backend unreachable", never fabricated),
+  **tile launcher** (icon+label grid grouped by domain), and **command result** (ActionRunner).
+- **Sync pill** (🟢 Synced / 🟠 Offline via `navigator.onLine`, icon+text) and a
+  **density toggle** (comfortable/compact, persisted) — docs/05.
+- New `ui` Zustand store (density + command recents). 27 vitest tests; strict build; verified
+  in headless Chromium (dashboard, palette, tiles screenshots).
+
 ### Frontend — design system & app shell
 - Real visual design over the tokens (`theme/tokens.css` expanded: spacing scale, elevation,
   radii, focus ring; new `theme/app.css` component layer). Replaced bare/unstyled markup.

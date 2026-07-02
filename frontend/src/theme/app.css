@@ -232,6 +232,124 @@
 
 .spacer { flex: 1; }
 
+/* ── Nav extras ─────────────────────────────────────────────────────────── */
+.nav__count { margin-left: auto; font-size: 11px; color: rgba(255,255,255,0.5); }
+.kbd-hint {
+  margin-left: auto; font-size: 10px; font-weight: 600;
+  border: 1px solid rgba(255,255,255,0.25); border-radius: 4px; padding: 1px 5px;
+  color: rgba(255,255,255,0.7);
+}
+
+/* ── Top-bar command trigger + right cluster ────────────────────────────── */
+.topbar__right { display: flex; align-items: center; gap: var(--s-3); }
+.cmd-trigger {
+  display: flex; align-items: center; gap: var(--s-2);
+  min-width: 320px; max-width: 460px; flex: 1;
+  padding: 8px 12px; margin-right: var(--s-4);
+  border: 1px solid var(--color-border-strong); border-radius: var(--radius);
+  background: var(--color-surface-2); color: var(--color-text-muted);
+  font: inherit; cursor: text; text-align: left;
+}
+.cmd-trigger:hover { border-color: var(--color-brand); }
+.cmd-trigger .kbd-hint { color: var(--color-text-muted); border-color: var(--color-border-strong); }
+
+/* ── Scope line ─────────────────────────────────────────────────────────── */
+.scopeline {
+  display: flex; align-items: center; gap: var(--s-2); flex-wrap: wrap;
+  padding: var(--s-2) var(--s-6);
+  background: var(--color-brand-tint);
+  border-bottom: 1px solid var(--color-border);
+  font-size: 12.5px; color: var(--color-brand-deep);
+}
+.scopeline__label { font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; font-size: 11px; }
+.scopeline__sep { color: var(--color-text-muted); }
+
+/* ── Sync pill ──────────────────────────────────────────────────────────── */
+.pill {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 12px; font-weight: 600; padding: 4px 10px; border-radius: 999px;
+}
+.pill--ok { background: var(--color-success-tint); color: var(--color-success); }
+.pill--warn { background: var(--color-warning-tint); color: var(--color-warning-fg); }
+
+/* ── Command palette (⌘K) ───────────────────────────────────────────────── */
+.palette__backdrop {
+  position: fixed; inset: 0; background: rgba(16,24,40,0.45);
+  display: flex; align-items: flex-start; justify-content: center;
+  padding-top: 12vh; z-index: 50;
+}
+.palette {
+  width: 100%; max-width: 620px;
+  background: var(--color-surface); border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg); overflow: hidden; display: flex; flex-direction: column;
+  max-height: 70vh;
+}
+.palette__input {
+  border: none; border-bottom: 1px solid var(--color-border);
+  padding: var(--s-4) var(--s-5); font-size: 16px; font: inherit; font-size: 16px;
+}
+.palette__input:focus-visible { box-shadow: none; }
+.palette__list { overflow-y: auto; padding: var(--s-2); }
+.palette__section {
+  font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em;
+  color: var(--color-text-muted); padding: var(--s-2) var(--s-3) var(--s-1);
+}
+.palette__empty { padding: var(--s-5); text-align: center; color: var(--color-text-secondary); }
+.palette__item {
+  display: flex; align-items: center; gap: var(--s-3); width: 100%;
+  padding: var(--s-3); border: none; background: transparent; border-radius: var(--radius-sm);
+  font: inherit; cursor: pointer; text-align: left;
+}
+.palette__item.is-active { background: var(--color-brand-tint); }
+.palette__label { font-weight: 500; }
+.palette__domain { margin-left: auto; font-size: 12px; color: var(--color-text-muted); }
+.palette__foot {
+  display: flex; align-items: center; gap: var(--s-3);
+  border-top: 1px solid var(--color-border); padding: var(--s-2) var(--s-4);
+  font-size: 11px; color: var(--color-text-muted);
+}
+.palette__foot kbd, .kbd-hint {
+  font-family: ui-monospace, Menlo, monospace;
+}
+.palette__foot kbd {
+  border: 1px solid var(--color-border-strong); border-radius: 4px;
+  padding: 0 4px; margin-right: 2px; font-size: 11px;
+}
+
+/* ── Tile launcher ──────────────────────────────────────────────────────── */
+.tile-group { margin-bottom: var(--s-6); }
+.tile-group__title { font-size: 14px; margin-bottom: var(--s-3); display: flex; align-items: center; gap: var(--s-2); }
+.tile-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: var(--s-3); }
+.tile {
+  display: flex; flex-direction: column; align-items: flex-start; gap: var(--s-2);
+  padding: var(--s-4); min-height: 96px;
+  background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius);
+  box-shadow: var(--shadow-sm); cursor: pointer; text-align: left;
+  transition: border-color 0.12s ease, box-shadow 0.12s ease, transform 0.06s ease;
+}
+.tile:hover { border-color: var(--color-brand); box-shadow: var(--shadow-md); }
+.tile:active { transform: translateY(1px); }
+.tile__icon { font-size: 22px; }
+.tile__label { font-weight: 600; flex: 1; }
+
+/* ── KPI cards (ANVW dashboard) ─────────────────────────────────────────── */
+.kpi-row { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: var(--s-4); }
+.kpi {
+  background: var(--color-surface); border: 1px solid var(--color-border);
+  border-radius: var(--radius); box-shadow: var(--shadow-sm); padding: var(--s-5);
+}
+.kpi__value { font-size: 30px; font-weight: 700; letter-spacing: -0.02em; }
+.kpi__title { font-size: 13px; color: var(--color-text-secondary); margin-top: var(--s-1); }
+.kpi__sub { font-size: 11px; color: var(--color-text-muted); margin-top: var(--s-2); display: flex; align-items: center; gap: 6px; }
+
+/* ── Density: compact ───────────────────────────────────────────────────── */
+.is-compact .content { padding: var(--s-4) var(--s-5); }
+.is-compact .card { padding: var(--s-4); }
+.is-compact .tile { min-height: 78px; padding: var(--s-3); }
+.is-compact .kpi { padding: var(--s-4); }
+.is-compact .kpi__value { font-size: 24px; }
+.is-compact .scopeline { padding: 6px var(--s-5); }
+
 /* ── Responsive ─────────────────────────────────────────────────────────── */
 @media (max-width: 860px) {
   .shell { grid-template-columns: 1fr; }

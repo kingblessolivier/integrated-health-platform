@@ -11,6 +11,7 @@ interface AuthState {
   userId: string | null;
   tenantId: string | null;
   maxSensitivity: string;
+  geoScope: unknown;
   commands: Set<CommandCode>;
   logoutReason: LogoutReason;
   /** Establish a session from a raw access token (decodes the four-axis claims). */
@@ -39,6 +40,7 @@ const LOGGED_OUT = {
   userId: null,
   tenantId: null,
   maxSensitivity: "aggregate",
+  geoScope: null,
   commands: new Set<CommandCode>(),
 };
 
@@ -48,6 +50,7 @@ function claimsFor(token: string) {
     userId: c.userId,
     tenantId: c.tenantId,
     maxSensitivity: c.maxSensitivity,
+    geoScope: c.geoScope,
     commands: new Set(c.commands),
   };
 }
