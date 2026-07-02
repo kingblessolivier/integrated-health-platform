@@ -557,6 +557,16 @@ FROM encounters GROUP BY 1,2;
 | `observations` / `vitals_stream` / `lab_results` | `Observation` |
 | `facilities` | `Organization` / `Location` |
 
+## Domain extensions (migration `0002`)
+
+Later domains add tables in [`backend/sql/0002_domain_extensions.sql`](../backend/sql/0002_domain_extensions.sql)
+(applied after `0001`), each tenant-scoped with RLS:
+
+| Table | Purpose |
+|---|---|
+| `cbhi_members` / `cbhi_premiums` | CBHI/mutuelle enrolment and premium collections |
+| `purchase_orders` / `purchase_order_lines` | B2B supply-chain purchase orders |
+
 ## Seeding & migration notes
 
 - Seed `commands` from the catalogue in [03](03-command-catalogue.md) (all ~115 codes).

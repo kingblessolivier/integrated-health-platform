@@ -59,6 +59,15 @@ MVP_COMMANDS = [
     ("PBVW", "View PBF score"),
     ("PBSC", "PBF scoring"),
     ("PBAP", "Approve / trigger PBF payment"),
+    ("CBEN", "CBHI enrolment"),
+    ("CBPR", "CBHI premiums / collections"),
+    ("CBPP", "CBHI provider payments"),
+    ("CBFB", "CBHI fund balance"),
+    ("SCRO", "Reorder recommendation"),
+    ("SCPO", "Purchase order"),
+    ("SCRV", "Goods-receiving verify"),
+    ("SCMP", "B2B marketplace browse"),
+    ("SCNS", "National supply intelligence"),
     ("ANVW", "Role-scoped dashboard view"),
 ]
 

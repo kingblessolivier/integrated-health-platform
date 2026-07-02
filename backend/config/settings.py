@@ -34,6 +34,8 @@ INSTALLED_APPS = [
     "apps.stock",
     "apps.hr",
     "apps.pbf",
+    "apps.cbhi",
+    "apps.supply",
 ]
 
 MIDDLEWARE = [
