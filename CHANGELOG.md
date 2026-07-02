@@ -5,6 +5,11 @@ on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### Added (Diagnostics — lab & imaging)
+- `diagnostics` app: lab flow (`LBOR` order → `LBRS` result with reference-interval flagging
+  → `LBSN` sign-off) and imaging (`IMOR` order → `IMSN` signed report). Pure, unit-tested
+  `classify_result` (low/normal/high/unknown). Command-bound + audited.
+
 ### Added (Phase 5 — Surveillance & analytics)
 - `surveillance` app: pure, unit-tested `aggregate_counts` + `detect_outbreaks` (threshold
   flagging) and de-identified endpoints `SVMP` (cluster counts) and `SVAL` (outbreak alerts).
