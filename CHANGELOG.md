@@ -5,6 +5,15 @@ on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### Security (hardening vs. documented model — docs/66)
+- **Fixed: RLS now `FORCE`d** on every tenant table (`0001`/`0002`/`0003`) — previously
+  `ENABLE`-only, which the table-owner app role bypassed, so tenant isolation did not hold
+  (docs/35). `bootstrap_user` now sets `app.tenant_id` before writing.
+- **Fixed: Argon2id** password hashing (docs/08) via `PASSWORD_HASHERS` + `argon2-cffi`.
+- **Fixed: least privilege** — `bootstrap_user` no longer creates a Django superuser.
+- Added `docs/66-security-review.md`: honest code-vs-docs audit, incl. remaining gaps
+  (geography/sensitivity axes, consent enforcement, 403 token-blacklist, RS256/MFA).
+
 ### Added (Regulatory & maternity — with `0003` migration)
 - `backend/sql/0003_regulatory_maternity.sql`: `drug_registrations`, `adverse_events`
   (national) and `deliveries`, `births` (tenant-scoped + RLS).

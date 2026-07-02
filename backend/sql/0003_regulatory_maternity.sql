@@ -41,6 +41,7 @@ DECLARE t text;
 BEGIN
   FOREACH t IN ARRAY ARRAY['deliveries','births'] LOOP
     EXECUTE format('ALTER TABLE %I ENABLE ROW LEVEL SECURITY;', t);
+    EXECUTE format('ALTER TABLE %I FORCE ROW LEVEL SECURITY;', t);
     EXECUTE format($p$CREATE POLICY tenant_isolation ON %I
       USING (tenant_id = current_setting('app.tenant_id', true)::uuid)
       WITH CHECK (tenant_id = current_setting('app.tenant_id', true)::uuid);$p$, t);

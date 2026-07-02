@@ -498,6 +498,9 @@ BEGIN
   END LOOP;
 END $$;
 
+-- FORCE ROW LEVEL SECURITY is also applied so the policy binds even when the app connects
+-- as the table owner (see the migration files). In production the app should additionally
+-- connect as a dedicated NON-owner role for defence in depth.
 -- Patient access also respects consent (enforced in the service layer in addition to RLS).
 -- A dedicated read-only analytics role bypasses RLS for de-identified aggregates only:
 -- CREATE ROLE analytics_ro BYPASSRLS;  (granted SELECT on materialized views, not base tables)
