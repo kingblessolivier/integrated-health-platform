@@ -1,9 +1,13 @@
+from django.contrib import admin
+from django.views.generic import RedirectView
 from django.urls import include, path
 from rest_framework_simplejwt.views import TokenRefreshView
 
 from apps.accounts.tokens import FourAxisTokenView
 
 urlpatterns = [
+    path("", RedirectView.as_view(url="/api/v1/", permanent=False)),
+    path("admin/", admin.site.urls),
     # Login issues a JWT carrying the four-axis scope + command bundle (docs/04, 49).
     path("api/v1/auth/token/", FourAxisTokenView.as_view(), name="token"),
     path("api/v1/auth/token/refresh/", TokenRefreshView.as_view(), name="token-refresh"),
