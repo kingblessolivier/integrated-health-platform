@@ -116,7 +116,8 @@ numbered documents are grouped below.
   [63 — Use Case Catalogue](docs/63-use-case-catalogue.md)
 
 **Delivery:** [64 — MVP Scope & Delivery Roadmap](docs/64-mvp-scope-and-roadmap.md) ·
-[65 — Running & Verifying Locally](docs/65-running-and-verifying.md)
+[65 — Running & Verifying Locally](docs/65-running-and-verifying.md) ·
+[66 — Security Review](docs/66-security-review.md)
 
 **Project meta:** [Contributing](CONTRIBUTING.md) · [Code of Conduct](CODE_OF_CONDUCT.md) ·
 [Security Policy](SECURITY.md) · [Changelog](CHANGELOG.md)

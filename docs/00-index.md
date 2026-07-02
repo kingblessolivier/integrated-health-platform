@@ -80,6 +80,7 @@
 ## Delivery
 - [64. MVP Scope & Delivery Roadmap](./64-mvp-scope-and-roadmap.md)
 - [65. Running & Verifying Locally](./65-running-and-verifying.md)
+- [66. Security Review (code vs. documented model)](./66-security-review.md)
 
 ## Codebase
 - [`backend/`](../backend/README.md) — Django + DRF API skeleton (auth, RLS, audit, sample app)

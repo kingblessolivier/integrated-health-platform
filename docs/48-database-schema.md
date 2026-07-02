@@ -498,6 +498,9 @@ BEGIN
   END LOOP;
 END $$;
 
+-- FORCE ROW LEVEL SECURITY is also applied so the policy binds even when the app connects
+-- as the table owner (see the migration files). In production the app should additionally
+-- connect as a dedicated NON-owner role for defence in depth.
 -- Patient access also respects consent (enforced in the service layer in addition to RLS).
 -- A dedicated read-only analytics role bypasses RLS for de-identified aggregates only:
 -- CREATE ROLE analytics_ro BYPASSRLS;  (granted SELECT on materialized views, not base tables)
@@ -556,6 +559,18 @@ FROM encounters GROUP BY 1,2;
 | `orders` (lab/imaging) | `ServiceRequest` |
 | `observations` / `vitals_stream` / `lab_results` | `Observation` |
 | `facilities` | `Organization` / `Location` |
+
+## Domain extensions (migration `0002`)
+
+Later domains add tables in [`backend/sql/0002_domain_extensions.sql`](../backend/sql/0002_domain_extensions.sql)
+(applied after `0001`), each tenant-scoped with RLS:
+
+| Table | Purpose |
+|---|---|
+| `cbhi_members` / `cbhi_premiums` | CBHI/mutuelle enrolment and premium collections |
+| `purchase_orders` / `purchase_order_lines` | B2B supply-chain purchase orders |
+| `drug_registrations` / `adverse_events` (`0003`) | Rwanda FDA registration + pharmacovigilance (national) |
+| `deliveries` / `births` (`0003`) | Maternity records feeding civil registration |
 
 ## Seeding & migration notes
 

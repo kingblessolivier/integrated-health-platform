@@ -5,6 +5,78 @@ on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### Security & resilience (gap-closing — docs/66 #6–#9)
+- **JWT blacklist + LOCK**: `apps/security` — blacklist store, `SELK` LOCK endpoint, a
+  **blacklist-aware auth class** that rejects revoked tokens, and an **audited exception
+  handler** that logs access denials (docs/08/16).
+- **TOTP MFA** (`apps/security/mfa.py`, RFC 6238, stdlib) — verify + skew window, tested.
+- **PHI field encryption** (`apps/security/crypto.py`, Fernet/AES) — encrypt/decrypt, tested.
+- **RS256** JWT supported when `JWT_ALG=RS256` (keys from env/HSM).
+- **Circuit breaker** for national-system calls (`apps/integrations/circuit_breaker.py`) —
+  closed/open/half-open, tested (docs/09 resilience).
+- **Geography** query-layer helper `filter_by_geo` (docs/08 geography axis), tested.
+- Infra-only items (TLS 1.3/mTLS/HSM/Kong/Cloudflare) documented as deployment scope in docs/66.
+
+### Security (four-axis + consent — docs/66 #4/#5)
+- **Sensitivity axis enforced**: `apps/accounts/access.py` (`sensitivity_ok`, `in_geo_scope`);
+  `HoldsCommand` now checks a view's `min_sensitivity` against the JWT `max_sensitivity`.
+  Individual-PHI views (patients, encounters, diagnoses, FHIR export) marked `individual`.
+- **Consent gate**: new `consent` app (`Consent` model + pure `consent_permits`) wired into
+  patient-record reads — a revoked actor is refused with 403.
+- Unit tests for sensitivity/geo helpers, the sensitivity permission, and the consent gate.
+
+### Security (hardening vs. documented model — docs/66)
+- **Fixed: RLS now `FORCE`d** on every tenant table (`0001`/`0002`/`0003`) — previously
+  `ENABLE`-only, which the table-owner app role bypassed, so tenant isolation did not hold
+  (docs/35). `bootstrap_user` now sets `app.tenant_id` before writing.
+- **Fixed: Argon2id** password hashing (docs/08) via `PASSWORD_HASHERS` + `argon2-cffi`.
+- **Fixed: least privilege** — `bootstrap_user` no longer creates a Django superuser.
+- Added `docs/66-security-review.md`: honest code-vs-docs audit, incl. remaining gaps
+  (geography/sensitivity axes, consent enforcement, 403 token-blacklist, RS256/MFA).
+
+### Added (Regulatory & maternity — with `0003` migration)
+- `backend/sql/0003_regulatory_maternity.sql`: `drug_registrations`, `adverse_events`
+  (national) and `deliveries`, `births` (tenant-scoped + RLS).
+- `regulatory` app: `RGDR` register drug, `RGPV` report ADR, `RGRC` recall; pure
+  `registration_status` service + tests.
+- `maternity` app: `MTDL` delivery, `MTBR` birth registration (flags birth weight); pure
+  `classify_birth_weight` service + tests.
+
+### Added (CBHI & supply chain — with `0002` migration)
+- `backend/sql/0002_domain_extensions.sql`: new tenant-scoped, RLS-protected tables —
+  `cbhi_members`, `cbhi_premiums`, `purchase_orders`, `purchase_order_lines`.
+- `cbhi` app: `CBEN` enrol, `CBPR` premium, `CBFB` fund balance (premiums − claims paid);
+  pure `fund_balance` service + tests.
+- `supply` app: `SCRO` reorder recommendation, `SCPO` purchase order, `SCRV` receive; pure
+  `reorder_quantity` service + tests.
+
+### Added (Performance-Based Financing)
+- `pbf` app: `PBSC` weighted scoring + proportional payment and `PBAP` approval. Pure,
+  unit-tested `compute_pbf_score` and `payment_for_score` (clamped). Command-bound + audited.
+
+### Added (HR & payroll)
+- `hr` app: `HRLC` licence-expiry tracking and `PYRN` payroll run. Pure, unit-tested
+  `compute_paye` (RRA progressive bands), `compute_rssb`, `net_pay`, and `licence_status`.
+
+### Added (Stock & inventory)
+- `stock` app: `STIN` inquiry, `STRC` receive goods (batch/expiry + movement), `STEX` expiry
+  monitoring (90/60/30 buckets). Pure, unit-tested `expiry_bucket` + `is_low_stock`; reuses
+  the pharmacy stock models.
+
+### Added (Diagnostics — lab & imaging)
+- `diagnostics` app: lab flow (`LBOR` order → `LBRS` result with reference-interval flagging
+  → `LBSN` sign-off) and imaging (`IMOR` order → `IMSN` signed report). Pure, unit-tested
+  `classify_result` (low/normal/high/unknown). Command-bound + audited.
+
+### Added (Phase 5 — Surveillance & analytics)
+- `surveillance` app: pure, unit-tested `aggregate_counts` + `detect_outbreaks` (threshold
+  flagging) and de-identified endpoints `SVMP` (cluster counts) and `SVAL` (outbreak alerts).
+
+### Added (Phase 5 — Interoperability, FHIR)
+- `interop` app: a pure, unit-tested HL7 **FHIR R4** mapping (`to_fhir_patient/encounter/
+  condition`, `build_patient_bundle`) + a command-bound `GET /fhir/patients/<id>/` export
+  (Patient + Encounters + Conditions bundle) + a DHIS2 push stub.
+
 ### Added (Auth bootstrap)
 - `bootstrap_user` management command: creates a Django auth user linked to a `staff` row +
   full command bundle, so `FourAxisTokenSerializer` issues real four-axis JWTs — closing the
