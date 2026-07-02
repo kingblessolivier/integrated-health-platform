@@ -3,6 +3,8 @@ import uuid
 
 from django.db import models
 
+from apps.security.fields import EncryptedTextField
+
 
 class Encounter(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4)
@@ -23,7 +25,7 @@ class Diagnosis(models.Model):
     tenant_id = models.UUIDField()
     encounter_id = models.UUIDField()
     icd_code = models.TextField()
-    note = models.TextField(null=True, blank=True)
+    note = EncryptedTextField(null=True, blank=True)  # PHI: encrypted at rest (docs/66 9a)
     created_by = models.UUIDField()
 
     class Meta:

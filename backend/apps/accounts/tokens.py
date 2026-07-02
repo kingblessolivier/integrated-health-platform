@@ -5,8 +5,12 @@ Login issues a JWT carrying the four-axis scope (docs/04, docs/49):
 TenantContextMiddleware reads user_id/tenant_id to set the RLS session vars;
 HoldsCommand reads `commands` to authorise each request.
 """
+from rest_framework.exceptions import AuthenticationFailed
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
+
+from apps.security.mfa import verify_totp
+from apps.security.models import MfaDevice
 
 from .models import Staff, UserCommand
 
@@ -26,6 +30,23 @@ def build_claims(staff: Staff) -> dict:
 
 
 class FourAxisTokenSerializer(TokenObtainPairSerializer):
+    def validate(self, attrs):
+        """Enforce a second factor before minting tokens for MFA-enrolled users (docs/66 8b).
+
+        Password auth runs first (super().validate); only then do we demand the OTP,
+        so a wrong password never reveals whether MFA is enabled. Users without a
+        confirmed device are unaffected until they enrol.
+        """
+        data = super().validate(attrs)
+        device = MfaDevice.objects.filter(user=self.user, confirmed=True).first()
+        if device is not None:
+            otp = (self.initial_data.get("otp") or "").strip()
+            if not otp or not verify_totp(device.secret, otp):
+                raise AuthenticationFailed(
+                    "A valid one-time code is required.", code="mfa_required"
+                )
+        return data
+
     @classmethod
     def get_token(cls, user):
         token = super().get_token(user)
