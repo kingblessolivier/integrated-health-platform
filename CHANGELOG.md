@@ -5,6 +5,10 @@ on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### Added (Phase 5 — Surveillance & analytics)
+- `surveillance` app: pure, unit-tested `aggregate_counts` + `detect_outbreaks` (threshold
+  flagging) and de-identified endpoints `SVMP` (cluster counts) and `SVAL` (outbreak alerts).
+
 ### Added (Phase 5 — Interoperability, FHIR)
 - `interop` app: a pure, unit-tested HL7 **FHIR R4** mapping (`to_fhir_patient/encounter/
   condition`, `build_patient_bundle`) + a command-bound `GET /fhir/patients/<id>/` export

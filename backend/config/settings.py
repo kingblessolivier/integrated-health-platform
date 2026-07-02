@@ -29,6 +29,7 @@ INSTALLED_APPS = [
     "apps.emergency",
     "apps.claims",
     "apps.interop",
+    "apps.surveillance",
 ]
 
 MIDDLEWARE = [
