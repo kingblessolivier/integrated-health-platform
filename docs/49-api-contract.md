@@ -18,7 +18,8 @@ Django REST / FastAPI serializers.
 - MFA: `POST /auth/mfa/enrol/` mints a TOTP secret (returns `secret` + `otpauth_uri`; `409`
   if already enrolled — admin reset required); `POST /auth/mfa/confirm/` `{otp}` proves the
   authenticator and activates enforcement. From then on `POST /auth/token/` requires `otp`
-  alongside the credentials, else `401 mfa_required`.
+  alongside the credentials, else `401 mfa_required`. `POST /security/mfa/reset/` `{nida_id}`
+  (command **SEMR**, admin) clears a user's device so they can re-enrol after e.g. a lost phone.
 - Content type: `application/json`; resource names plural kebab-case (`/stock-items`).
 - Idempotency: unsafe writes accept an `Idempotency-Key` header (critical for offline replay).
 - Pagination: cursor-based — `?limit=&cursor=`; responses include `next_cursor`.
