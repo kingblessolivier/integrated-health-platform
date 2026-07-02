@@ -262,6 +262,7 @@ auditable**: each execution writes `who · command · resource · when` to the a
 |---|---|
 | `SESD` | Security dashboard |
 | `SELK` | LOCK (kill session, blacklist JWT, lock account) |
+| `SEMR` | MFA reset (clear a user's TOTP device so they can re-enrol) |
 | `SEWA` | WAF rules management |
 | `SEAN` | Anomaly / fraud alerts |
 | `SEKR` | Key management / rotation |

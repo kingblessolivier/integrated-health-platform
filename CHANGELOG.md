@@ -5,6 +5,12 @@ on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### MFA admin reset (SEMR)
+- `POST /security/mfa/reset/` `{nida_id}` — command-gated (**SEMR**) admin action that clears
+  a user's TOTP device so they can re-enrol (e.g. lost phone); lifts login enforcement for
+  that user until they enrol again. Audited against the target Staff id (never the secret);
+  `404` if the user has no device. New command `SEMR` seeded and added to docs/03.
+
 ### MFA self-service enrolment (completes the docs/66 8b flow)
 - `POST /auth/mfa/enrol/` — mints a 160-bit TOTP secret, returns it with the `otpauth://`
   provisioning URI (client renders the QR). Refuses (`409`) if a confirmed device exists —

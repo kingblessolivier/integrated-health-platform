@@ -5,10 +5,14 @@ Security endpoints:
 - MFA enrolment (docs/08, docs/04 tier 2) — any authenticated user can enrol a TOTP
   device and confirm it; no command needed. Login enforces the confirmed device
   (apps/accounts/tokens.py).
+- MFA reset (SEMR) — an administrator clears a user's device so they can re-enrol
+  (e.g. lost phone). Command-bound + audited.
 """
+from django.contrib.auth.models import User
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from apps.accounts.models import Staff
 from apps.audit import services as audit
 
 from .blacklist import blacklist_jti
@@ -71,3 +75,30 @@ class MfaConfirm(APIView):
         audit.append(c.get("user_id"), "MFAC", "mfa_device", str(device.id), {},
                      c.get("tenant_id"))
         return Response({"status": "confirmed"})
+
+
+class MfaReset(APIView):
+    """Admin action (SEMR): clear a target user's TOTP device by their national ID, so they
+    can re-enrol after e.g. losing their phone. Removing the device also lifts login
+    enforcement for that user until they enrol again. The reset is audited against the target
+    Staff id (never the secret)."""
+
+    required_command = "SEMR"
+
+    def post(self, request):
+        c = request.auth or {}
+        nida_id = str(request.data.get("nida_id") or "").strip()
+        if not nida_id:
+            return Response({"detail": "nida_id is required."}, status=400)
+        # The auth username is the national ID (see FourAxisTokenSerializer.get_token).
+        user = User.objects.filter(username=nida_id).first()
+        deleted = 0
+        if user is not None:
+            deleted, _ = MfaDevice.objects.filter(user=user).delete()
+        target_staff = Staff.objects.filter(nida_id=nida_id).values_list("id", flat=True).first()
+        audit.append(c.get("user_id"), "SEMR", "mfa_device",
+                     str(target_staff) if target_staff else None,
+                     {"nida_id": nida_id, "cleared": bool(deleted)}, c.get("tenant_id"))
+        if not deleted:
+            return Response({"detail": "No MFA device found for that user."}, status=404)
+        return Response({"status": "reset", "nida_id": nida_id})
