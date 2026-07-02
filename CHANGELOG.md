@@ -5,6 +5,14 @@ on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### Security (four-axis + consent — docs/66 #4/#5)
+- **Sensitivity axis enforced**: `apps/accounts/access.py` (`sensitivity_ok`, `in_geo_scope`);
+  `HoldsCommand` now checks a view's `min_sensitivity` against the JWT `max_sensitivity`.
+  Individual-PHI views (patients, encounters, diagnoses, FHIR export) marked `individual`.
+- **Consent gate**: new `consent` app (`Consent` model + pure `consent_permits`) wired into
+  patient-record reads — a revoked actor is refused with 403.
+- Unit tests for sensitivity/geo helpers, the sensitivity permission, and the consent gate.
+
 ### Security (hardening vs. documented model — docs/66)
 - **Fixed: RLS now `FORCE`d** on every tenant table (`0001`/`0002`/`0003`) — previously
   `ENABLE`-only, which the table-owner app role bypassed, so tenant isolation did not hold

@@ -21,6 +21,7 @@ INSTALLED_APPS = [
     "rest_framework",
     "apps.accounts",
     "apps.audit",
+    "apps.consent",
     "apps.patients",
     "apps.clinical",
     "apps.pharmacy",

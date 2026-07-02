@@ -8,8 +8,15 @@ the token, and writes an audit entry.
 """
 from rest_framework.permissions import BasePermission
 
+from .access import sensitivity_ok
+
 
 class HoldsCommand(BasePermission):
+    """Enforces the role (command) and sensitivity axes. Tenant is enforced by RLS; a view
+    exposing identifiable data declares `min_sensitivity` (e.g. "individual") and the caller's
+    JWT `max_sensitivity` must permit it. Geography is enforced at the query layer via
+    `apps.accounts.access.in_geo_scope`."""
+
     message = "Caller does not hold the required command or is out of scope."
 
     def has_permission(self, request, view):
@@ -19,9 +26,12 @@ class HoldsCommand(BasePermission):
         claims = getattr(request, "auth", None)
         if not claims:
             return False
-        commands = set(claims.get("commands", []))
-        if required not in commands:
+        if required not in set(claims.get("commands", [])):
             return False
-        # Geography / tenant / sensitivity are enforced at the data layer via RLS +
-        # the service layer; this is the role(command) axis.
+        # Sensitivity axis: the view's minimum data-identifiability vs the caller's ceiling.
+        min_sensitivity = getattr(view, "min_sensitivity", None)
+        if min_sensitivity and not sensitivity_ok(
+            min_sensitivity, claims.get("max_sensitivity", "aggregate")
+        ):
+            return False
         return True
