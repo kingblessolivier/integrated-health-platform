@@ -5,6 +5,10 @@ on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### Added (Performance-Based Financing)
+- `pbf` app: `PBSC` weighted scoring + proportional payment and `PBAP` approval. Pure,
+  unit-tested `compute_pbf_score` and `payment_for_score` (clamped). Command-bound + audited.
+
 ### Added (HR & payroll)
 - `hr` app: `HRLC` licence-expiry tracking and `PYRN` payroll run. Pure, unit-tested
   `compute_paye` (RRA progressive bands), `compute_rssb`, `net_pay`, and `licence_status`.
