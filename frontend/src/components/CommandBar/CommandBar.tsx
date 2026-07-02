@@ -5,7 +5,13 @@ import { holdsCommand } from "../../lib/entitlements";
 
 /** Entitlement-first command palette (docs/06): shows only the actions whose command the
  * caller holds, grouped by domain, filtered by a search box. Selecting one runs it. */
-export function CommandBar({ onSelect }: { onSelect: (spec: ActionSpec) => void }) {
+export function CommandBar({
+  onSelect,
+  activeId,
+}: {
+  onSelect: (spec: ActionSpec) => void;
+  activeId?: string;
+}) {
   const [query, setQuery] = useState("");
 
   const held = useMemo(() => ACTIONS.filter((a) => holdsCommand(a.command)), []);
@@ -24,46 +30,46 @@ export function CommandBar({ onSelect }: { onSelect: (spec: ActionSpec) => void 
 
   if (held.length === 0) {
     return (
-      <p style={{ color: "var(--color-text-secondary)" }}>
-        You don't hold any commands yet. Ask an administrator to assign a command bundle.
-      </p>
+      <div className="empty">
+        <div className="empty__icon">🔑</div>
+        <div className="empty__title">No commands assigned yet</div>
+        <div className="empty__hint">
+          Ask an administrator to assign you a command bundle. Once granted, your actions appear
+          here automatically.
+        </div>
+      </div>
     );
   }
 
   return (
     <div>
       <input
+        className="search"
         aria-label="Type a command or search"
-        placeholder="Type a command or search…"
+        placeholder="Search commands…"
         value={query}
         onChange={(e) => setQuery(e.target.value)}
-        style={{
-          width: "100%",
-          maxWidth: 480,
-          padding: 8,
-          border: "1px solid var(--color-border-strong)",
-          borderRadius: "var(--radius)",
-        }}
       />
-      {groups.length === 0 && <p>No commands match “{query}”.</p>}
+      {groups.length === 0 && (
+        <p style={{ color: "var(--color-text-secondary)", marginTop: "var(--s-4)" }}>
+          No commands match “{query}”.
+        </p>
+      )}
       {groups.map(([domain, actions]) => (
-        <div key={domain} style={{ marginTop: 16 }}>
-          <h4 style={{ margin: "0 0 4px", color: "var(--color-brand-deep)" }}>{domain}</h4>
-          <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
+        <div key={domain} className="cmd-group">
+          <div className="cmd-group__title">{domain}</div>
+          <div className="cmd-tiles">
             {actions.map((a) => (
               <button
                 key={a.id}
+                className="cmd-tile"
+                aria-pressed={activeId === a.id}
                 onClick={() => onSelect(a)}
                 title={`${a.method} /api/v1${a.path}`}
-                style={{
-                  padding: "6px 10px",
-                  border: "1px solid var(--color-border-strong)",
-                  borderRadius: "var(--radius)",
-                  background: "var(--color-surface)",
-                  cursor: "pointer",
-                }}
               >
-                <kbd>{a.command}</kbd> {a.label}
+                <span className="badge">{a.command}</span>
+                <span className="cmd-tile__label">{a.label}</span>
+                <span className={`method method--${a.method} cmd-tile__method`}>{a.method}</span>
               </button>
             ))}
           </div>

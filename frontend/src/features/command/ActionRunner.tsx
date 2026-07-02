@@ -1,11 +1,10 @@
 import { useState } from "react";
-import { Field } from "../../components/ui/Field";
 import { api } from "../../lib/api/client";
 import { buildRequest } from "../../lib/commands/request";
 import type { ActionSpec, FieldSpec } from "../../lib/commands/types";
 
 /** Renders a form from an ActionSpec, calls the endpoint via the shared api() client, and
- * shows the JSON result. One component drives every command-bound endpoint (docs/03, docs/49). */
+ * shows the result. One component drives every command-bound endpoint (docs/03, docs/49). */
 export function ActionRunner({ spec }: { spec: ActionSpec }) {
   const [values, setValues] = useState<Record<string, string>>({});
   const [result, setResult] = useState<unknown>(null);
@@ -51,69 +50,113 @@ export function ActionRunner({ spec }: { spec: ActionSpec }) {
   }
 
   return (
-    <section style={{ maxWidth: 560 }}>
-      <h3>
-        <kbd>{spec.command}</kbd> {spec.label}
-      </h3>
-      <p style={{ color: "var(--color-text-secondary)", fontSize: 13 }}>
-        {spec.method} <code>/api/v1{spec.path}</code>
+    <div className="card">
+      <div style={{ display: "flex", alignItems: "center", gap: "var(--s-2)" }}>
+        <span className="badge">{spec.command}</span>
+        <h3 className="card__title" style={{ margin: 0 }}>{spec.label}</h3>
+        <span className={`method method--${spec.method}`} style={{ marginLeft: "auto" }}>
+          {spec.method}
+        </span>
+      </div>
+      <p className="card__subtitle" style={{ marginTop: "var(--s-2)" }}>
+        <code>/api/v1{spec.path}</code>
       </p>
+
       <form onSubmit={run}>
+        {spec.fields.length === 0 && (
+          <p style={{ color: "var(--color-text-secondary)", fontSize: 13 }}>
+            No inputs — just run it.
+          </p>
+        )}
         {spec.fields.map((f) => (
           <Input key={f.name} field={f} value={values[f.name] ?? ""} onChange={(v) => set(f.name, v)} />
         ))}
-        <button
-          type="submit"
-          disabled={busy}
-          style={{
-            padding: "8px 16px",
-            background: "var(--color-brand)",
-            color: "#fff",
-            border: "none",
-            borderRadius: "var(--radius)",
-            cursor: busy ? "default" : "pointer",
-          }}
-        >
+        <button type="submit" className="btn btn--primary" disabled={busy}>
           {busy ? "Running…" : spec.method === "GET" ? "Fetch" : "Submit"}
         </button>
       </form>
 
       {error && (
-        <pre role="alert" style={{ color: "var(--color-danger)", whiteSpace: "pre-wrap" }}>
-          {error}
-        </pre>
+        <div className="alert alert--error" role="alert">
+          <pre style={{ margin: 0, whiteSpace: "pre-wrap", font: "inherit" }}>{error}</pre>
+        </div>
       )}
-      {result !== null && (
-        <pre
-          style={{
-            background: "var(--color-surface)",
-            border: "1px solid var(--color-border)",
-            borderRadius: "var(--radius)",
-            padding: 12,
-            overflow: "auto",
-          }}
-        >
-          {JSON.stringify(result, null, 2)}
-        </pre>
-      )}
-    </section>
+      {result !== null && <Result data={result} />}
+    </div>
+  );
+}
+
+function Result({ data }: { data: unknown }) {
+  if (Array.isArray(data)) {
+    return (
+      <div style={{ marginTop: "var(--s-4)" }}>
+        <div className="alert alert--success">{data.length} result(s).</div>
+        {data.map((row, i) => (
+          <ObjectTable key={i} obj={row} />
+        ))}
+      </div>
+    );
+  }
+  if (data && typeof data === "object") {
+    // Common list envelopes: {results: [...]} / {items: [...]}
+    const env = data as Record<string, unknown>;
+    const listKey = ["results", "items", "alerts"].find((k) => Array.isArray(env[k]));
+    return (
+      <div style={{ marginTop: "var(--s-4)" }}>
+        <div className="alert alert--success">Success.</div>
+        {listKey ? <Result data={env[listKey]} /> : <ObjectTable obj={data} />}
+      </div>
+    );
+  }
+  return (
+    <div style={{ marginTop: "var(--s-4)" }}>
+      <div className="alert alert--success">{String(data)}</div>
+    </div>
+  );
+}
+
+function ObjectTable({ obj }: { obj: unknown }) {
+  if (!obj || typeof obj !== "object") {
+    return <div className="alert alert--info">{String(obj)}</div>;
+  }
+  const entries = Object.entries(obj as Record<string, unknown>);
+  return (
+    <table className="kv" style={{ marginBottom: "var(--s-3)" }}>
+      <tbody>
+        {entries.map(([k, v]) => (
+          <tr key={k}>
+            <td>{k}</td>
+            <td>
+              {v !== null && typeof v === "object" ? (
+                <code>{JSON.stringify(v)}</code>
+              ) : (
+                String(v)
+              )}
+            </td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
   );
 }
 
 function Input({ field, value, onChange }: { field: FieldSpec; value: string; onChange: (v: string) => void }) {
+  const labelEl = (
+    <span className="field__label">
+      {field.label}
+      {field.required && <span className="field__req"> *</span>}
+    </span>
+  );
   if (field.type === "select") {
     return (
-      <label htmlFor={field.name} style={{ display: "block", marginBottom: "var(--space)" }}>
-        <span style={{ display: "block", fontSize: 13, color: "var(--color-text-secondary)" }}>
-          {field.label}
-          {field.required ? " *" : ""}
-        </span>
+      <label htmlFor={field.name} className="field">
+        {labelEl}
         <select
           id={field.name}
+          className="select"
           value={value}
           required={field.required}
           onChange={(e) => onChange(e.target.value)}
-          style={{ width: "100%", padding: 8, borderRadius: "var(--radius)", border: "1px solid var(--color-border-strong)" }}
         >
           <option value="">—</option>
           {field.options?.map((o) => (
@@ -127,40 +170,34 @@ function Input({ field, value, onChange }: { field: FieldSpec; value: string; on
   }
   if (field.type === "textarea" || field.type === "json") {
     return (
-      <label htmlFor={field.name} style={{ display: "block", marginBottom: "var(--space)" }}>
-        <span style={{ display: "block", fontSize: 13, color: "var(--color-text-secondary)" }}>
-          {field.label}
-          {field.required ? " *" : ""}
-        </span>
+      <label htmlFor={field.name} className="field">
+        {labelEl}
         <textarea
           id={field.name}
+          className={`textarea${field.type === "json" ? " textarea--mono" : ""}`}
           value={value}
           required={field.required}
           placeholder={field.placeholder}
           onChange={(e) => onChange(e.target.value)}
           rows={field.type === "json" ? 3 : 2}
-          style={{
-            width: "100%",
-            padding: 8,
-            borderRadius: "var(--radius)",
-            border: "1px solid var(--color-border-strong)",
-            fontFamily: field.type === "json" ? "monospace" : "inherit",
-          }}
         />
       </label>
     );
   }
   return (
-    <Field
-      label={field.required ? `${field.label} *` : field.label}
-      id={field.name}
-      type={field.type === "number" ? "number" : field.type === "date" ? "date" : "text"}
-      inputMode={field.type === "number" ? "numeric" : undefined}
-      value={value}
-      placeholder={field.placeholder}
-      required={field.required}
-      onChange={(e) => onChange(e.target.value)}
-    />
+    <label htmlFor={field.name} className="field">
+      {labelEl}
+      <input
+        id={field.name}
+        className="input"
+        type={field.type === "number" ? "number" : field.type === "date" ? "date" : "text"}
+        inputMode={field.type === "number" ? "numeric" : undefined}
+        value={value}
+        placeholder={field.placeholder}
+        required={field.required}
+        onChange={(e) => onChange(e.target.value)}
+      />
+    </label>
   );
 }
 

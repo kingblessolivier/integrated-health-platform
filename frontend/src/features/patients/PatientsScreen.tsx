@@ -4,8 +4,8 @@ import { Field } from "../../components/ui/Field";
 import { registerPatient, searchPatients } from "../../lib/api/patients";
 import { holdsCommand } from "../../lib/entitlements";
 
-/** Patient search (PTSR) + register (PTRG) — the first API-backed vertical slice. Each
- * action is shown only if the user holds the command; the server re-checks regardless. */
+/** Patient search (PTSR) + register (PTRG). Each action is shown only if the user holds the
+ * command; the server re-checks regardless. */
 export function PatientsScreen() {
   const canSearch = holdsCommand("PTSR");
   const canRegister = holdsCommand("PTRG");
@@ -29,14 +29,24 @@ export function PatientsScreen() {
   });
 
   if (!canSearch && !canRegister) {
-    return <p style={{ color: "var(--color-text-secondary)" }}>You don't have patient access.</p>;
+    return (
+      <div className="card">
+        <div className="empty">
+          <div className="empty__icon">🔒</div>
+          <div className="empty__title">No patient access</div>
+          <div className="empty__hint">You don't hold the patient search or register commands.</div>
+        </div>
+      </div>
+    );
   }
 
   return (
-    <div style={{ display: "grid", gap: 24, gridTemplateColumns: "1fr 1fr", alignItems: "start" }}>
+    <div className="grid-2">
       {canSearch && (
-        <section>
-          <h3>Search patients (PTSR)</h3>
+        <div className="card">
+          <h3 className="card__title">
+            <span className="badge">PTSR</span> Search patients
+          </h3>
           <form
             onSubmit={(e) => {
               e.preventDefault();
@@ -44,25 +54,40 @@ export function PatientsScreen() {
             }}
           >
             <Field label="Name or national ID" value={q} onChange={(e) => setQ(e.target.value)} />
+            <button type="submit" className="btn btn--primary">Search</button>
           </form>
-          {results.isLoading && <p>Searching…</p>}
-          {results.isError && <p style={{ color: "var(--color-danger)" }}>Search failed.</p>}
-          {results.data && (
-            <ul>
-              {results.data.results.map((p) => (
-                <li key={p.id}>
-                  {p.given_name} {p.family_name} <small>({p.nida_id})</small>
-                </li>
-              ))}
-              {results.data.results.length === 0 && <li>No matches.</li>}
-            </ul>
-          )}
-        </section>
+
+          {results.isLoading && <p style={{ marginTop: "var(--s-4)" }}>Searching…</p>}
+          {results.isError && <div className="alert alert--error">Search failed.</div>}
+          {results.data &&
+            (results.data.results.length === 0 ? (
+              <div className="alert alert--info" style={{ marginTop: "var(--s-4)" }}>No matches.</div>
+            ) : (
+              <table className="table" style={{ marginTop: "var(--s-4)" }}>
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>National ID</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {results.data.results.map((p) => (
+                    <tr key={p.id}>
+                      <td>{[p.given_name, p.family_name].filter(Boolean).join(" ") || "—"}</td>
+                      <td>{p.nida_id ?? "—"}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            ))}
+        </div>
       )}
 
       {canRegister && (
-        <section>
-          <h3>Register patient (PTRG)</h3>
+        <div className="card">
+          <h3 className="card__title">
+            <span className="badge">PTRG</span> Register patient
+          </h3>
           <form
             onSubmit={(e) => {
               e.preventDefault();
@@ -85,17 +110,17 @@ export function PatientsScreen() {
               value={form.family_name}
               onChange={(e) => setForm({ ...form, family_name: e.target.value })}
             />
-            <button type="submit" disabled={register.isPending}>
+            <button type="submit" className="btn btn--primary" disabled={register.isPending}>
               {register.isPending ? "Registering…" : "Register"}
             </button>
             {register.isError && (
-              <p role="alert" style={{ color: "var(--color-danger)" }}>
+              <div className="alert alert--error" role="alert">
                 Registration failed (duplicate or out of scope).
-              </p>
+              </div>
             )}
-            {register.isSuccess && <p style={{ color: "var(--color-success)" }}>Patient registered.</p>}
+            {register.isSuccess && <div className="alert alert--success">Patient registered.</div>}
           </form>
-        </section>
+        </div>
       )}
     </div>
   );

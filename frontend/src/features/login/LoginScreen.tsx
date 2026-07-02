@@ -13,11 +13,13 @@ export function LoginScreen() {
   const [otp, setOtp] = useState("");
   const [mfa, setMfa] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [info, setInfo] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
 
   async function submit(e: React.FormEvent) {
     e.preventDefault();
     setError(null);
+    setInfo(null);
     setBusy(true);
     try {
       const { access } = await login(nidaId, password, mfa ? otp : undefined);
@@ -25,7 +27,7 @@ export function LoginScreen() {
     } catch (err) {
       if (err instanceof MfaRequiredError) {
         setMfa(true);
-        setError("Enter the 6-digit code from your authenticator app.");
+        setInfo("Enter the 6-digit code from your authenticator app.");
       } else {
         setError(err instanceof Error ? err.message : "Login failed.");
       }
@@ -35,62 +37,57 @@ export function LoginScreen() {
   }
 
   return (
-    <div style={{ maxWidth: 360, margin: "10vh auto", padding: 24 }}>
-      <h1 style={{ color: "var(--color-brand-deep)", fontSize: 20 }}>
-        🏥 Integrated National Health Platform
-      </h1>
-      {logoutReason === "expired" && (
-        <p style={{ color: "var(--color-warning-fg)" }}>Your session expired — please sign in again.</p>
-      )}
-      {logoutReason === "scope_violation" && (
-        <p style={{ color: "var(--color-danger)" }}>Session ended: access was out of scope.</p>
-      )}
-      <form onSubmit={submit}>
-        <Field
-          label="National ID"
-          value={nidaId}
-          autoComplete="username"
-          onChange={(e) => setNidaId(e.target.value)}
-          required
-        />
-        <Field
-          label="Password"
-          type="password"
-          value={password}
-          autoComplete="current-password"
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
-        {mfa && (
+    <div className="login">
+      <div className="login__card">
+        <div className="login__brand">
+          <span className="login__mark">🏥</span>
+          <span>Integrated National Health Platform</span>
+        </div>
+        <p className="login__sub">Sign in to your account</p>
+
+        {logoutReason === "expired" && (
+          <div className="alert alert--warn">Your session expired — please sign in again.</div>
+        )}
+        {logoutReason === "scope_violation" && (
+          <div className="alert alert--error">Session ended: access was out of scope.</div>
+        )}
+
+        <form onSubmit={submit}>
           <Field
-            label="Authenticator code"
-            inputMode="numeric"
-            value={otp}
-            onChange={(e) => setOtp(e.target.value)}
+            label="National ID"
+            value={nidaId}
+            autoComplete="username"
+            onChange={(e) => setNidaId(e.target.value)}
             required
           />
-        )}
-        {error && (
-          <p role="alert" style={{ color: "var(--color-danger)", fontSize: 14 }}>
-            {error}
-          </p>
-        )}
-        <button
-          type="submit"
-          disabled={busy}
-          style={{
-            width: "100%",
-            padding: 10,
-            background: "var(--color-brand)",
-            color: "#fff",
-            border: "none",
-            borderRadius: "var(--radius)",
-            cursor: busy ? "default" : "pointer",
-          }}
-        >
-          {busy ? "Signing in…" : "Sign in"}
-        </button>
-      </form>
+          <Field
+            label="Password"
+            type="password"
+            value={password}
+            autoComplete="current-password"
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+          {mfa && (
+            <Field
+              label="Authenticator code"
+              inputMode="numeric"
+              value={otp}
+              onChange={(e) => setOtp(e.target.value)}
+              required
+            />
+          )}
+          {info && <div className="alert alert--info">{info}</div>}
+          {error && (
+            <div className="alert alert--error" role="alert">
+              {error}
+            </div>
+          )}
+          <button type="submit" className="btn btn--primary btn--block" disabled={busy}>
+            {busy ? "Signing in…" : "Sign in"}
+          </button>
+        </form>
+      </div>
     </div>
   );
 }
