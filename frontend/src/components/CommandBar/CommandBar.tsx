@@ -1,27 +1,34 @@
 import { useMemo, useState } from "react";
+import { ACTIONS } from "../../lib/commands/registry";
+import type { ActionSpec } from "../../lib/commands/types";
 import { holdsCommand } from "../../lib/entitlements";
 
-/** Illustrative slice of the catalogue (docs/03). Load the full set from the API in real use. */
-const ALL_COMMANDS = [
-  { code: "PTRG", label: "Register patient" },
-  { code: "PTSR", label: "Search patient" },
-  { code: "ENNW", label: "Open encounter" },
-  { code: "ENDX", label: "Diagnose (ICD)" },
-  { code: "RXNW", label: "Prescribe" },
-  { code: "RXDP", label: "Dispense (FEFO)" },
-  { code: "ANVW", label: "Dashboard" },
-];
-
-export function CommandBar() {
+/** Entitlement-first command palette (docs/06): shows only the actions whose command the
+ * caller holds, grouped by domain, filtered by a search box. Selecting one runs it. */
+export function CommandBar({ onSelect }: { onSelect: (spec: ActionSpec) => void }) {
   const [query, setQuery] = useState("");
-  // Only commands the user holds are ever shown — entitlement-first.
-  const visible = useMemo(
-    () =>
-      ALL_COMMANDS.filter((c) => holdsCommand(c.code)).filter((c) =>
-        `${c.code} ${c.label}`.toLowerCase().includes(query.toLowerCase()),
-      ),
-    [query],
-  );
+
+  const held = useMemo(() => ACTIONS.filter((a) => holdsCommand(a.command)), []);
+  const groups = useMemo(() => {
+    const q = query.trim().toLowerCase();
+    const matched = held.filter((a) =>
+      `${a.command} ${a.label} ${a.domain}`.toLowerCase().includes(q),
+    );
+    const byDomain = new Map<string, ActionSpec[]>();
+    for (const a of matched) {
+      if (!byDomain.has(a.domain)) byDomain.set(a.domain, []);
+      byDomain.get(a.domain)!.push(a);
+    }
+    return [...byDomain.entries()];
+  }, [held, query]);
+
+  if (held.length === 0) {
+    return (
+      <p style={{ color: "var(--color-text-secondary)" }}>
+        You don't hold any commands yet. Ask an administrator to assign a command bundle.
+      </p>
+    );
+  }
 
   return (
     <div>
@@ -30,14 +37,38 @@ export function CommandBar() {
         placeholder="Type a command or search…"
         value={query}
         onChange={(e) => setQuery(e.target.value)}
+        style={{
+          width: "100%",
+          maxWidth: 480,
+          padding: 8,
+          border: "1px solid var(--color-border-strong)",
+          borderRadius: "var(--radius)",
+        }}
       />
-      <ul>
-        {visible.map((c) => (
-          <li key={c.code}>
-            <kbd>{c.code}</kbd> {c.label}
-          </li>
-        ))}
-      </ul>
+      {groups.length === 0 && <p>No commands match “{query}”.</p>}
+      {groups.map(([domain, actions]) => (
+        <div key={domain} style={{ marginTop: 16 }}>
+          <h4 style={{ margin: "0 0 4px", color: "var(--color-brand-deep)" }}>{domain}</h4>
+          <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
+            {actions.map((a) => (
+              <button
+                key={a.id}
+                onClick={() => onSelect(a)}
+                title={`${a.method} /api/v1${a.path}`}
+                style={{
+                  padding: "6px 10px",
+                  border: "1px solid var(--color-border-strong)",
+                  borderRadius: "var(--radius)",
+                  background: "var(--color-surface)",
+                  cursor: "pointer",
+                }}
+              >
+                <kbd>{a.command}</kbd> {a.label}
+              </button>
+            ))}
+          </div>
+        </div>
+      ))}
     </div>
   );
 }

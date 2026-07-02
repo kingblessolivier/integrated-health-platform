@@ -5,6 +5,26 @@ on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### Frontend — command runner over the full API surface
+- **Declarative command registry** (`lib/commands/registry.ts`) mirroring every command-bound
+  endpoint the backend exposes today (~40 actions across 17 domains — patients, clinical,
+  pharmacy, stock, diagnostics, billing/claims, CBHI, supply, community, emergency, maternity,
+  regulatory, PBF, workforce, surveillance, security), each with its real path, method, and
+  fields (from the views/serializers, docs/49).
+- **Generic `ActionRunner`** renders a form from a spec, calls the endpoint via the shared
+  `api()` client, and shows the JSON result — one component drives all endpoints.
+- **Command bar** now lists the registry grouped by domain, filtered to the commands the user
+  holds (entitlement-first, docs/06); selecting one runs it.
+- Pure, tested request builder (`lib/commands/request.ts`): path-param filling, query/body
+  split, type coercion (number/json), required-field + JSON validation. Vitest now 21 tests.
+- Verified: strict `tsc` + `vite build`; the authenticated shell renders in headless Chromium
+  and shows only held commands grouped by domain.
+
+### Frontend — first vertical slice (login → command-gated screen → MFA)
+- Login (`features/login`) → `POST /auth/token/` decoding the four-axis JWT into the session,
+  with an OTP step on `mfa_required`; patient search/register screen; MFA enrolment UI;
+  JWT-claim decode + persisted session store (vitest-tested).
+
 ### MFA admin reset (SEMR)
 - `POST /security/mfa/reset/` `{nida_id}` — command-gated (**SEMR**) admin action that clears
   a user's TOTP device so they can re-enrol (e.g. lost phone); lifts login enforcement for
