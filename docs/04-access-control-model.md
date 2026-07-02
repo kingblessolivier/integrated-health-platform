@@ -31,14 +31,33 @@ Same command, different result by scope: a CHW running `PTSR` sees their village
 hospital clerk running `PTSR` sees the facility. **Command grants the function; ABAC
 bounds the data.**
 
+## Access tiers (not everything is command-gated)
+
+Commands gate **privileged and sensitive** actions, not ordinary app use. Endpoints fall into
+three tiers:
+
+| Tier | Requires | Declared by | Examples |
+|---|---|---|---|
+| **Public** | nothing (anonymous) | `permission_classes = [AllowAny]` | login (`/auth/token`), token refresh, health checks |
+| **Authenticated, no command** | a valid token only | *default* — no `required_command` | own profile, reference/lookup data, MFA enrolment, non-PHI dashboards |
+| **Command-gated** | a valid token **and** the command (+ scope) | `required_command` (+ `min_sensitivity`) | create/view a patient, prescribe, adjudicate a claim, export FHIR |
+
+The default under `HoldsCommand` is the middle tier: the app works normally for any signed-in
+user; a specific command is demanded **only** when a view opts in. A view that needs no
+authentication at all must opt out explicitly with `AllowAny` — an un-annotated view is never
+silently anonymous.
+
 ## Authorisation flow (every request)
 
 1. Request arrives carrying the JWT (role/command set + geography + tenant + sensitivity).
-2. **Command check** — does `user_commands` contain the requested command? If not → `403`.
-3. **Scope check** — does the target data fall within the user's geography, tenant, and
+2. **Authentication check** — is there a valid token? Public (`AllowAny`) views skip this; all
+   others require it. If missing/invalid → `401/403`.
+3. **Command check** — *only if the view declares `required_command`*: does `user_commands`
+   contain it? If not → `403`. (Views without a command skip this step — normal app use.)
+4. **Scope check** — does the target data fall within the user's geography, tenant, and
    sensitivity ceiling? If not → `403`.
-4. On `403`: terminate session, blacklist token (Redis), and log the event to the audit chain.
-5. On success: execute, then write `who · command · resource · when` to the audit chain.
+5. On `403`: terminate session, blacklist token (Redis), and log the event to the audit chain.
+6. On success: execute, then write `who · command · resource · when` to the audit chain.
 
 ## Data model
 

@@ -5,6 +5,15 @@ on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### Access model — three tiers (not everything is command-gated)
+- `HoldsCommand` now requires **authentication by default** and enforces a command **only**
+  when a view declares `required_command`. Ordinary authenticated use ("the app works
+  normally") no longer needs a command; only privileged/sensitive actions do.
+- Un-annotated views are no longer silently **anonymous**: fully public endpoints must opt out
+  explicitly with `permission_classes = [AllowAny]` (as login/token refresh already do).
+- Documented the tiers (public / authenticated-no-command / command-gated) in
+  `docs/04-access-control-model.md`; tests cover the new default.
+
 ### Security (MFA enforcement + PHI encryption — docs/66 #8b/#9a)
 - **TOTP MFA enforced at login**: `FourAxisTokenSerializer.validate` requires a valid `otp`
   for any user with a confirmed `MfaDevice` (`apps/security/models.py` + `sql/0004_security.sql`
