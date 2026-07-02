@@ -52,6 +52,10 @@ MVP_COMMANDS = [
     ("STRC", "Receive goods (batch / expiry)"),
     ("STTR", "Inter-facility transfer"),
     ("STEX", "Expiry monitoring (90/60/30)"),
+    ("HRON", "Onboard staff (NIDA + licence)"),
+    ("HRLC", "Licence / compliance tracking"),
+    ("PYRN", "Run payroll"),
+    ("PYDD", "Statutory deductions (PAYE / RSSB)"),
     ("ANVW", "Role-scoped dashboard view"),
 ]
 
