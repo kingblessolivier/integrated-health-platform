@@ -5,6 +5,18 @@ on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### Fixed — login issued a JWT with no commands under RLS
+- **Root cause:** `staff` is `FORCE` row-level-security scoped by `app.tenant_id`, but the
+  token endpoint runs before any JWT/tenant context exists, so `app.tenant_id` was unset and
+  the staff lookup returned zero rows — the JWT carried an empty `commands`/scope, so the
+  dashboard showed nothing even when the user held every command.
+- **Fix:** `sql/0005_login_resolver.sql` adds a `login_claims(nida)` SECURITY DEFINER function
+  that resolves one staff member's four-axis claims + command bundle bypassing RLS (returns
+  only that person's own data). `FourAxisTokenSerializer.get_token` now uses it via
+  `resolve_login_claims`, with a savepoint-guarded ORM fallback for environments where the
+  function isn't installed (tests / superuser dev). docs/48 + docs/65 updated (incl. a
+  "logged in but no commands" troubleshooting checklist).
+
 ### Frontend — unified command-driven dashboard (docs 06/50)
 - **⌘K command palette**: keyboard-activated (⌘K/Ctrl-K) modal, entitlement-filtered, ranked
   (exact/prefix code → label/domain), arrow-navigable, with recents; pure `rankCommands`/

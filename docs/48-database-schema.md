@@ -572,6 +572,7 @@ Later domains add tables in [`backend/sql/0002_domain_extensions.sql`](../backen
 | `drug_registrations` / `adverse_events` (`0003`) | Rwanda FDA registration + pharmacovigilance (national) |
 | `deliveries` / `births` (`0003`) | Maternity records feeding civil registration |
 | `mfa_devices` (`0004`) | TOTP MFA enrolment keyed to `auth_user` (auth-scoped, no tenant RLS); gates login enforcement (docs/08, docs/66 8b) |
+| `login_claims()` fn (`0005`) | SECURITY DEFINER resolver that returns one staff member's four-axis claims by national ID, bypassing RLS for the pre-auth token endpoint (login precedes any tenant context, so `app.tenant_id` is unset and `staff` would otherwise be invisible) |
 
 ## Seeding & migration notes
 
