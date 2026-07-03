@@ -45,12 +45,30 @@ and maps it (by username == `nida_id`) to a `staff` row + command bundle.
 cd backend && . .venv/bin/activate
 # domain schema (managed=False tables) + auth tables
 psql "postgresql://inhp:$POSTGRES_PASSWORD@localhost:5432/inhp" -f sql/0001_initial.sql
+psql "postgresql://inhp:$POSTGRES_PASSWORD@localhost:5432/inhp" -f sql/0002_domain_extensions.sql
+psql "postgresql://inhp:$POSTGRES_PASSWORD@localhost:5432/inhp" -f sql/0003_regulatory_maternity.sql
+psql "postgresql://inhp:$POSTGRES_PASSWORD@localhost:5432/inhp" -f sql/0004_security.sql
+psql "postgresql://inhp:$POSTGRES_PASSWORD@localhost:5432/inhp" -f sql/0005_login_resolver.sql
 python manage.py migrate                       # creates django.contrib.auth tables
 python manage.py seed_commands                 # the command catalogue
 python manage.py bootstrap_user --nida 1199900000000001   # prints a random password
 
 python manage.py runserver
 ```
+
+> **`0005` matters for login.** `staff` is `FORCE` RLS, but login runs before any tenant
+> context exists (`app.tenant_id` is unset), so a plain read returns no rows and the JWT would
+> carry **no commands**. The `login_claims()` SECURITY DEFINER function resolves the user's
+> claims bypassing RLS. Apply `0005` as a privileged role so the function owner can bypass RLS.
+
+### Troubleshooting: "logged in but no commands / empty dashboard"
+The JWT `commands` array is empty. Check, in order:
+1. **`0005` applied?** Without it, a non-superuser DB role sees no `staff` at login → no claims.
+2. **`seed_commands` run?** If the `commands` catalogue is empty there is nothing to grant.
+3. **Login username == `staff.nida_id`?** The token maps the account to its staff by national ID.
+4. **`user_commands` rows exist for that staff?** Assigning Django-admin *permissions/groups*
+   has no effect — only `user_commands` (staff ↔ command) count. `bootstrap_user` grants them.
+Re-running `bootstrap_user --nida <id>` fixes 2–4 in one step; then sign out and back in.
 
 Then exercise the API over HTTP:
 
